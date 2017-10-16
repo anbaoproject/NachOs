@@ -62,9 +62,9 @@ char *UserToSystem(int virtAddress, int limit)
     }
     memset(kernelBuffer,0, limit + 1);
 
-    for (int i = 0; i < limit; ++i)
+    for (int i = 0; i < limit; i++)
     {
-        machine->ReadMem(virtAddress + 1, 1, &oneChar);
+        machine->ReadMem(virtAddress + i, 1, &oneChar);
         kernelBuffer[i] = (char)oneChar;
         printf("%c", oneChar);
         if (oneChar == 0)
@@ -115,7 +115,7 @@ void ExceptionHandler(ExceptionType which)
         {
             int virtAddress;
             char *filename;
-
+            filename = new char[MaxFileLength];
             DEBUG('a', "\n SC_CREATE call ..,");
             DEBUG('a', "\n Reading virtual address of file name ...");
 		filename = new char[MaxFileLength];
