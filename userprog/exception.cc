@@ -113,6 +113,14 @@ void ExceptionHandler(ExceptionType which)
             interrupt->Halt();
             break;
         }
+        case SC_Sub:
+        {
+            int op1  = machine->ReadRegister(4);
+            int op2  = machine->ReadRegister(5);
+            int res = op1-op2;
+            machine->WriteRegister(2,res);
+            break;
+        }
             case SC_Create:
         {
             int virtAddress;
