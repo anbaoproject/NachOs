@@ -60,7 +60,7 @@ char *UserToSystem(int virtAddress, int limit)
     {
         return kernelBuffer;
     }
-    memset(kernelBuffer,0, limit + 1);
+    memset(kernelBuffer, 0, limit + 1);
 
     for (int i = 0; i < limit; i++)
     {
@@ -91,7 +91,7 @@ int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
     do
     {
         oneChar = (int)buffer[i];
-        machine->WriteMem(virtAddress + i,1, oneChar);
+        machine->WriteMem(virtAddress + i, 1, oneChar);
         i++;
     } while (i < lengthBuffer && oneChar != 0);
     return i;
@@ -108,17 +108,19 @@ void ExceptionHandler(ExceptionType which)
         switch (type)
         {
         case SC_Halt:
+        {
             DEBUG('a', "Shutdown, initiated by user program.\n");
             interrupt->Halt();
             break;
-        case SC_Create:
+        }
+            case SC_Create:
         {
             int virtAddress;
             char *filename;
             filename = new char[MaxFileLength];
             DEBUG('a', "\n SC_CREATE call ..,");
             DEBUG('a', "\n Reading virtual address of file name ...");
-		filename = new char[MaxFileLength];
+            filename = new char[MaxFileLength];
             virtAddress = machine->ReadRegister(4);
             DEBUG('a', "\n Reading filename ...");
             filename = UserToSystem(virtAddress, MaxFileLength + 1);
@@ -127,7 +129,7 @@ void ExceptionHandler(ExceptionType which)
                 printf("\n Not enough memory in system ");
                 DEBUG('a', "\n Not engouh memory in system ");
                 machine->WriteRegister(2, -1);
-                delete filename;
+                delete[] filename;
                 return;
             }
             DEBUG('a', "\n Finish reading filename.");
@@ -135,11 +137,12 @@ void ExceptionHandler(ExceptionType which)
             {
                 printf("\n Error create file %s", filename);
                 machine->WriteRegister(2, -1);
-                delete filename;
+                delete[] filename;
                 return;
             }
+            printf("\n Create File %s\n", filename);
             machine->WriteRegister(2, 0);
-            delete filename;
+            delete[] filename;
             break;
         }
         }
