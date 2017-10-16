@@ -56,10 +56,11 @@ void ExceptionHandler(ExceptionType which)
     {
     case SyscallException:
     {
-        if (type == SC_Halt)
-        {
+        switch(type){
+            case SC_Halt:
             DEBUG('a', "Shutdown, initiated by user program.\n");
             interrupt->Halt();
+            break;
         }
         break;
     }
