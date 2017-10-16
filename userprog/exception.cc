@@ -25,6 +25,7 @@
 #include "system.h"
 #include "syscall.h"
 
+#define MaxFileLength 32
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the Nachos kernel.  Called when a user program
@@ -59,11 +60,11 @@ char *UserToSystem(int virtAddress, int limit)
     {
         return kernelBuffer;
     }
-    memset(kernelBuffer, limit + 1);
+    memset(kernelBuffer,0, limit + 1);
 
-    for (i = 0; i < limit; ++i)
+    for (int i = 0; i < limit; ++i)
     {
-        machine->ReadMem(virtualAddr + 1, 1, &oneChar);
+        machine->ReadMem(virtAddress + 1, 1, &oneChar);
         kernelBuffer[i] = (char)oneChar;
         printf("%c", oneChar);
         if (oneChar == 0)
@@ -75,24 +76,24 @@ char *UserToSystem(int virtAddress, int limit)
     return kernelBuffer;
 }
 
-int SystemToUser(int virtAddress, int lenghtBuffer, char *buffer)
+int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
 {
-    if (lenghtBuffer < 0)
+    if (lengthBuffer < 0)
     {
         return -1;
     }
-    if (lenghtBuffer == 0)
+    if (lengthBuffer == 0)
     {
-        return lenghtBuffer;
+        return lengthBuffer;
     }
     int i = 0;
     int oneChar = 0;
     do
     {
         oneChar = (int)buffer[i];
-        machine->WriteMem(virtualAddr + i, oneChar);
+        machine->WriteMem(virtAddress + i, oneChar);
         i++;
-    } while (i < lenghtBuffer && oneChar != 0);
+    } while (i < lengthBuffer && oneChar != 0);
     return i;
 }
 
@@ -120,7 +121,7 @@ void ExceptionHandler(ExceptionType which)
 
             virtAddress = machine->ReadRegister(4);
             DEBUG('a', "\n Reading filename ...");
-            filename = UserToSystem(virtualAddr, MaxFileSize + 1);
+            filename = UserToSystem(virtAddress, MaxFileSize + 1);
             if (filename == NULL)
             {
                 printf("\n Not enough memory in system ");
@@ -132,7 +133,7 @@ void ExceptionHandler(ExceptionType which)
             DEBUG('a', "\n Finish reading filename.");
             if (!fileSystem->Create(filename, 0))
             {
-                print("\n Error create file %s", filename);
+                printf("\n Error create file %s", filename);
                 machine->WriteRegister(2, -1);
                 delete filename;
                 return;
