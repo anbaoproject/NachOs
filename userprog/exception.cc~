@@ -118,7 +118,7 @@ void ExceptionHandler(ExceptionType which)
 
             DEBUG('a', "\n SC_CREATE call ..,");
             DEBUG('a', "\n Reading virtual address of file name ...");
-		filename = new char[MaxFileLength];
+
             virtAddress = machine->ReadRegister(4);
             DEBUG('a', "\n Reading filename ...");
             filename = UserToSystem(virtAddress, MaxFileLength + 1);
