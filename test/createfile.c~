@@ -7,9 +7,9 @@ main(){
     int len;
     char filename[maxlen+1];
     if(Create("text.txt")==-1){
-        printf("Error when create file");
+        //printf("Error when create file");
     }else{
-        printf("Create file succesfull");
+        //printf("Create file succesfull");
     }
-    Halt();
+    return 0;
 }

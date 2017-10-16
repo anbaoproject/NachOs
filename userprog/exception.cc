@@ -130,7 +130,7 @@ void ExceptionHandler(ExceptionType which)
                 DEBUG('a', "\n Not engouh memory in system ");
                 machine->WriteRegister(2, -1);
                 delete[] filename;
-                return;
+                break;
             }
             DEBUG('a', "\n Finish reading filename.");
             if (!fileSystem->Create(filename, 0))
@@ -138,7 +138,7 @@ void ExceptionHandler(ExceptionType which)
                 printf("\n Error create file %s", filename);
                 machine->WriteRegister(2, -1);
                 delete[] filename;
-                return;
+                break;
             }
             printf("\n Create File %s\n", filename);
             machine->WriteRegister(2, 0);
@@ -173,5 +173,7 @@ void ExceptionHandler(ExceptionType which)
     case IllegalInstrException:
         printf("Unimplemented or reserved instr %d %d \n", which, type);
         break;
+	case NoException:
+	return;
     }
 }
