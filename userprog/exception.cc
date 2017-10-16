@@ -74,9 +74,7 @@ void ExceptionHandler(ExceptionType which)
         printf("Translation resulted in an \n invalid physical address %d %d \n", which, type);
         break;
     case AddressErrorException:
-        printf("Unaligned reference or one that \n 
-                was beyond the end of the \n
-                address space %d %d \n", which, type);
+        printf("Unaligned reference or one that\n was beyond the end of the \naddress space %d %d \n", which, type);
         break;
     case OverflowException:
         printf("nteger overflow in add or sub %d %d \n", which, type);
