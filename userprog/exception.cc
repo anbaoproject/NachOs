@@ -91,7 +91,7 @@ int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
     do
     {
         oneChar = (int)buffer[i];
-        machine->WriteMem(virtAddress + i, oneChar);
+        machine->WriteMem(virtAddress + i,1, oneChar);
         i++;
     } while (i < lengthBuffer && oneChar != 0);
     return i;
@@ -121,7 +121,7 @@ void ExceptionHandler(ExceptionType which)
 
             virtAddress = machine->ReadRegister(4);
             DEBUG('a', "\n Reading filename ...");
-            filename = UserToSystem(virtAddress, MaxFileSize + 1);
+            filename = UserToSystem(virtAddress, MaxFileLength + 1);
             if (filename == NULL)
             {
                 printf("\n Not enough memory in system ");
