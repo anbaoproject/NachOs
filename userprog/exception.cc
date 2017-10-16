@@ -48,6 +48,54 @@
 //	are in machine.h.
 //----------------------------------------------------------------------
 
+//Copy từ User space -> System Space
+char *UserToSystem(int virtAddress, int limit)
+{
+    int index;
+    int oneChar;
+    char *kernelBuffer = NULL;
+    kernelBuffer = new char[limit + 1];
+    if (kernelBuffer == NULL)
+    {
+        return kernelBuffer;
+    }
+    memset(kernelBuffer, limit + 1);
+
+    for (i = 0; i < limit; ++i)
+    {
+        machine->ReadMem(virtualAddr + 1, 1, &oneChar);
+        kernelBuffer[i] = (char)oneChar;
+        printf("%c", oneChar);
+        if (oneChar == 0)
+        {
+            break;
+        }
+    }
+
+    return kernelBuffer;
+}
+
+int SystemToUser(int virtAddress, int lenghtBuffer, char *buffer)
+{
+    if (lenghtBuffer < 0)
+    {
+        return -1;
+    }
+    if (lenghtBuffer == 0)
+    {
+        return lenghtBuffer;
+    }
+    int i = 0;
+    int oneChar = 0;
+    do
+    {
+        oneChar = (int)buffer[i];
+        machine->WriteMem(virtualAddr + i, oneChar);
+        i++;
+    } while (i < lenghtBuffer && oneChar != 0);
+    return i;
+}
+
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
@@ -56,19 +104,58 @@ void ExceptionHandler(ExceptionType which)
     {
     case SyscallException:
     {
-        switch(type){
-            case SC_Halt:
+        switch (type)
+        {
+        case SC_Halt:
             DEBUG('a', "Shutdown, initiated by user program.\n");
             interrupt->Halt();
             break;
+        case SC_Create:
+        {
+            int virtAddress;
+            char *filename;
+
+            DEBUG('a', "\n SC_CREATE call ..,");
+            DEBUG('a', "\n Reading virtual address of file name ...");
+
+            virtAddress = machine->ReadRegister(4);
+            DEBUG('a', "\n Reading filename ...");
+            filename = UserToSystem(virtualAddr, MaxFileSize + 1);
+            if (filename == NULL)
+            {
+                printf("\n Not enough memory in system ");
+                DEBUG('a', "\n Not engouh memory in system ");
+                machine->WriteRegister(2, -1);
+                delete filename;
+                return;
+            }
+            DEBUG('a', "\n Finish reading filename.");
+            if (!fileSystem->Create(filename, 0))
+            {
+                print("\n Error create file %s", filename);
+                machine->WriteRegister(2, -1);
+                delete filename;
+                return;
+            }
+            machine->WriteRegister(2, 0);
+            delete filename;
+            break;
         }
+        }
+        //Avanced Program Counter
+        machine->registers[PrevPCReg] = machine->registers[PCReg];
+        machine->registers[PCReg] = machine->registers[NextPCReg];
+        machine->registers[NextPCReg] = machine->registers[NextPCReg] + 4;
         break;
     }
     case PageFaultException:
         printf("No valid translation found %d %d \n", which, type);
         break;
     case ReadOnlyException:
-        printf("Write attempted to page marked ""read-only"" %d %d \n", which, type);
+        printf("Write attempted to page marked "
+               "read-only"
+               " %d %d \n",
+               which, type);
         break;
     case BusErrorException:
         printf("Translation resulted in an \n invalid physical address %d %d \n", which, type);
