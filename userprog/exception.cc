@@ -98,21 +98,6 @@ int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
     return i;
 }
 
-<<<<<<< HEAD
-=======
-char* IntToChar(int number){
-    char * buffer = new char[MaxIntLength];
-    int i=0;
-    while(number>0){
-        buffer[i]= (number%10) + '0';
-        i++;
-        number/=10;
-    }
-    buffer[i]='\n';
-    return buffer;
-}
-
->>>>>>> 8c16640962ee7af54c19586b239fe6a472a1f6e7
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
