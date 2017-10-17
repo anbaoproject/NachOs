@@ -176,7 +176,7 @@ void ExceptionHandler(ExceptionType which)
             DEBUG('a', "\n Reading virtual address of number ...");
             number= machine->ReadRegister(4);
             char * numberBuffer = new char[MaxIntLength];
-            int nSize;
+            int nSize; int i=0;
             while(number>0){
                 numberBuffer[i]=(number%10) + '0';
                 i++;
