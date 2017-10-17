@@ -163,7 +163,6 @@ void ExceptionHandler(ExceptionType which)
             nSize = synchConsole->Read(buffer, MaxIntLength);
             i = 0;
             for(;i<nSize;i++){
-                printf("%c", buffer[i]);
                 number*=10;
                 number+=buffer[i]-48;
             }
