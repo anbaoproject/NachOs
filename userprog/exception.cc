@@ -191,7 +191,6 @@ void ExceptionHandler(ExceptionType which)
             char * numberBuffer = new char[MaxIntLength];
             int nSize;
             numberBuffer=IntToChar(nSize, number);
-            prinnt("\nSize: %d \n",nSize);
             synchConsole->Write(numberBuffer, nSize);
             break;
         }

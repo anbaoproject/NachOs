@@ -26,6 +26,7 @@
 #include "syscall.h"
 
 #define MaxFileLength 32
+#define MaxIntLength 9
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the Nachos kernel.  Called when a user program
@@ -97,6 +98,19 @@ int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
     return i;
 }
 
+char* IntToChar(int &buffersize, int number){
+    char * buffer = new char[MaxIntLength];
+    int i=0;
+    while(number>0){
+        buffer[i]= (number%10) + '0';
+        i++;
+        number/=10;
+    }
+    buffer[i]='\n';
+    buffersize = i;
+    return buffer;
+}
+
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
@@ -125,7 +139,6 @@ void ExceptionHandler(ExceptionType which)
         {
             int virtAddress;
             char *filename;
-            filename = new char[MaxFileLength];
             DEBUG('a', "\n SC_CREATE call ..,");
             DEBUG('a', "\n Reading virtual address of file name ...");
             filename = new char[MaxFileLength];
@@ -153,6 +166,35 @@ void ExceptionHandler(ExceptionType which)
             delete[] filename;
             break;
         }
+        case SC_ReadInt:
+        {
+            int number =0;
+            int nSize =0;
+            int i;
+            char *buffer = new char[MaxIntLength];
+            nSize = synchConsole->Read(buffer, MaxIntLength);
+            i = 0;
+            for(;i<nSize;i++){
+                number*=10;
+                number+=buffer[i]-48;
+            }
+            machine->WriteRegister(2, number);
+            delete[] buffer;
+            break;
+        }
+        case SC_PrintInt:
+        {
+            int number;
+            DEBUG('a', "\n SC_PrintInt call ..,");
+            DEBUG('a', "\n Reading virtual address of number ...");
+            number= machine->ReadRegister(4);
+            char * numberBuffer = new char[MaxIntLength];
+            int nSize;
+            numberBuffer=IntToChar(nSize, number);
+            printf("\nSize: %d \n",nSize);
+            synchConsole->Write(numberBuffer, nSize);
+            break;
+        }
         }
         //Avanced Program Counter
         machine->registers[PrevPCReg] = machine->registers[PCReg];
@@ -162,26 +204,32 @@ void ExceptionHandler(ExceptionType which)
     }
     case PageFaultException:
         printf("No valid translation found %d %d \n", which, type);
+        ASSERT(FALSE);
         break;
     case ReadOnlyException:
         printf("Write attempted to page marked "
                "read-only"
                " %d %d \n",
                which, type);
+        ASSERT(FALSE);               
         break;
     case BusErrorException:
         printf("Translation resulted in an \n invalid physical address %d %d \n", which, type);
+        ASSERT(FALSE);        
         break;
     case AddressErrorException:
         printf("Unaligned reference or one that\n was beyond the end of the \naddress space %d %d \n", which, type);
+        ASSERT(FALSE);       
         break;
     case OverflowException:
         printf("nteger overflow in add or sub %d %d \n", which, type);
+        ASSERT(FALSE);
         break;
     case IllegalInstrException:
         printf("Unimplemented or reserved instr %d %d \n", which, type);
+        ASSERT(FALSE);
         break;
 	case NoException:
-	return;
+        break;
     }
 }
