@@ -73,7 +73,7 @@ createfile: createfile.o start.o
 sub.o: sub.c
 	$(CC) $(CFLAGS) -c sub.c
 sub: sub.o start.o
-	$(LD) $(LDFLAGS) start.o sub.o -o sub.coff
+	$(LD) $(LDFLAGS) start.o sub.o sub.coff
 	../bin/coff2noff sub.coff sub
 readint.o: readint.c
 	$(CC) $(CFLAGS) -c halt.c
