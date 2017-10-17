@@ -162,26 +162,32 @@ void ExceptionHandler(ExceptionType which)
     }
     case PageFaultException:
         printf("No valid translation found %d %d \n", which, type);
+        ASSERT(FALSE);
         break;
     case ReadOnlyException:
         printf("Write attempted to page marked "
                "read-only"
                " %d %d \n",
                which, type);
+        ASSERT(FALSE);               
         break;
     case BusErrorException:
         printf("Translation resulted in an \n invalid physical address %d %d \n", which, type);
+        ASSERT(FALSE);        
         break;
     case AddressErrorException:
         printf("Unaligned reference or one that\n was beyond the end of the \naddress space %d %d \n", which, type);
+        ASSERT(FALSE);       
         break;
     case OverflowException:
         printf("nteger overflow in add or sub %d %d \n", which, type);
+        ASSERT(FALSE);
         break;
     case IllegalInstrException:
         printf("Unimplemented or reserved instr %d %d \n", which, type);
+        ASSERT(FALSE);
         break;
 	case NoException:
-	return;
+        break;
     }
 }
