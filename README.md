@@ -1,6 +1,7 @@
 # NachOs
 ### TO DO LIST
 1. Ân:
+	* Read Int
 	* Print Int
 	* Read Char
 	* Print Char 
