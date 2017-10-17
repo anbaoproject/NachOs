@@ -98,7 +98,7 @@ int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
     return i;
 }
 
-char* IntToChar(int &buffersize, int number){
+char* IntToChar(int number){
     char * buffer = new char[MaxIntLength];
     int i=0;
     while(number>0){
@@ -107,7 +107,6 @@ char* IntToChar(int &buffersize, int number){
         number/=10;
     }
     buffer[i]='\n';
-    buffersize = i;
     return buffer;
 }
 
@@ -190,8 +189,8 @@ void ExceptionHandler(ExceptionType which)
             number= machine->ReadRegister(4);
             char * numberBuffer = new char[MaxIntLength];
             int nSize;
-            numberBuffer=IntToChar(nSize, number);
-            synchConsole->Write(numberBuffer, nSize);
+            numberBuffer=IntToChar(number);
+            synchConsole->Write(numberBuffer, 9);
             break;
         }
         }
