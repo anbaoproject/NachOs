@@ -98,6 +98,19 @@ int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
     return i;
 }
 
+char* IntToChar(int &buffersize, int number){
+    char * buffer = new char[MaxIntLength];
+    int i=0;
+    while(number>0){
+        buffer[i]= (number%10) + '0';
+        i++;
+        number/=10;
+    }
+    buffer[i]='\n';
+    bufferSize = i;
+    return buffer;
+}
+
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
@@ -126,7 +139,6 @@ void ExceptionHandler(ExceptionType which)
         {
             int virtAddress;
             char *filename;
-            filename = new char[MaxFileLength];
             DEBUG('a', "\n SC_CREATE call ..,");
             DEBUG('a', "\n Reading virtual address of file name ...");
             filename = new char[MaxFileLength];
@@ -168,6 +180,18 @@ void ExceptionHandler(ExceptionType which)
             }
             machine->WriteRegister(2, number);
             delete[] buffer;
+            break;
+        }
+        case SC_PrintInt:
+        {
+            int number;
+            DEBUG('a', "\n SC_PrintInt call ..,");
+            DEBUG('a', "\n Reading virtual address of number ...");
+            number= machine->ReadRegister(4);
+            char * numberBuffer = new char[MaxIntLength];
+            int nSize;
+            numberBuffer=IntToChar(nSize, number);
+            synchConsole->Write(numberBuffer, nSize);
             break;
         }
         }

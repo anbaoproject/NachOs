@@ -31,6 +31,7 @@
 #define SC_Yield	10
 #define SC_Sub      11
 #define SC_ReadInt  12
+#define SC_PrintInt 13
 
 #ifndef IN_ASM
 
@@ -129,6 +130,7 @@ void Yield();
 int Sub(int a, int b);
 
 int ReadInt();
+void PrintInt();
 
 
 
