@@ -130,7 +130,7 @@ void Yield();
 int Sub(int a, int b);
 
 int ReadInt();
-void PrintInt();
+void PrintInt(int a);
 
 
 
