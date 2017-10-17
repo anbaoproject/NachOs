@@ -117,7 +117,7 @@ char* IntToChar(int &sizeBuffer, int number) {
         count++;
     }
     resultBuffer[count]='\n';
-    sizeBuffer=count;
+    sizeBuffer=count+1;
 
     delete[] numberBuffer;
     return resultBuffer;
