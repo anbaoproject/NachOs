@@ -107,7 +107,7 @@ char* IntToChar(int &buffersize, int number){
         number/=10;
     }
     buffer[i]='\n';
-    bufferSize = i;
+    buffersize = i;
     return buffer;
 }
 
@@ -191,6 +191,7 @@ void ExceptionHandler(ExceptionType which)
             char * numberBuffer = new char[MaxIntLength];
             int nSize;
             numberBuffer=IntToChar(nSize, number);
+            prinnt("\nSize: %d \n",nSize);
             synchConsole->Write(numberBuffer, nSize);
             break;
         }
