@@ -30,6 +30,7 @@
 #define SC_Fork		9
 #define SC_Yield	10
 #define SC_Sub      11
+#define SC_ReadInt  12
 
 #ifndef IN_ASM
 
@@ -126,6 +127,10 @@ void Fork(void (*func)());
 void Yield();	
 
 int Sub(int a, int b);
+
+int ReadInt();
+
+
 
 #endif /* IN_ASM */
 

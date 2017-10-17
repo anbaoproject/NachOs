@@ -24,8 +24,10 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
+#include "S"
 
 #define MaxFileLength 32
+#define MaxIntLength 9
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the Nachos kernel.  Called when a user program
@@ -151,6 +153,23 @@ void ExceptionHandler(ExceptionType which)
             printf("\n Create File %s\n", filename);
             machine->WriteRegister(2, 0);
             delete[] filename;
+            break;
+        }
+        case SC_ReadInt:
+        {
+            int number =0;
+            int nSize =0;
+            int i;
+            char *buffer = new char[MaxIntLength];
+            nSize = synchConsole->Read(buffer, MaxIntLength);
+            i = 0;
+            for(;i<nSize;i++){
+                printf("%c", buffer[i]);
+                number*=10;
+                number+=buffer[i]-48;
+            }
+            machine->WriteRegister(2, number);
+            delete[] buffer;
             break;
         }
         }
