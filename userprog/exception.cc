@@ -145,7 +145,7 @@ void _CreateFile() {
         DEBUG('a', "\n Not engouh memory in system ");
         machine->WriteRegister(2, -1);
         delete[] filename;
-        break;
+        return;
     }
     DEBUG('a', "\n Finish reading filename.");
     if (!fileSystem->Create(filename, 0))
@@ -153,7 +153,7 @@ void _CreateFile() {
         printf("\n Error create file %s", filename);
         machine->WriteRegister(2, -1);
         delete[] filename;
-        break;
+        return;
     }
     printf("\n Create File %s\n", filename);
     machine->WriteRegister(2, 0);
