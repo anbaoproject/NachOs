@@ -185,7 +185,7 @@ void _PrintInt() {
     int nSize;
     char * numberBuffer = new char[MaxIntLength];
     numberBuffer = IntToChar(nSize, number);
-    synchConsole->Write(resultBuffer, nSize);
+    synchConsole->Write(numberBuffer, nSize);
     delete[] numberBuffer;
 }
 
