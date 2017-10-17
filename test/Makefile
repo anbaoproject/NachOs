@@ -76,7 +76,7 @@ sub: sub.o start.o
 	$(LD) $(LDFLAGS) start.o sub.o -o sub.coff
 	../bin/coff2noff sub.coff sub
 readint.o: readint.c
-	$(CC) $(CFLAGS) -c halt.c
+	$(CC) $(CFLAGS) -c readint.c
 readint: readint.o start.o
 	$(LD) $(LDFLAGS) start.o readint.o -o readint.coff
 	../bin/coff2noff readint.coff readint
