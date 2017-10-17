@@ -24,7 +24,6 @@
 #include "copyright.h"
 #include "system.h"
 #include "syscall.h"
-#include "S"
 
 #define MaxFileLength 32
 #define MaxIntLength 9
