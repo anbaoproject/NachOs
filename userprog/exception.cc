@@ -98,6 +98,97 @@ int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
     return i;
 }
 
+char* IntToChar(int &sizeBuffer, int number) {
+    char * numberBuffer = new char[MaxIntLength];
+    char * resultBuffer = new char[MaxIntLength];
+    int nSize; 
+    int i=0;
+    int check =0;
+    int count =0;
+    number < 0 ? (check=1,number*=-1,resultBuffer[i]='-',count=1) : 0;
+    while(number>0){
+        numberBuffer[i]=(number%10) + '0';
+        i++;
+        number/=10;
+    }
+    nSize=i;
+    for(int j=nSize-1;j>=0;j--){
+        resultBuffer[count]=numberBuffer[j];
+        count++;
+    }
+    resultBuffer[count]='\n';
+    sizeBuffer=count;
+
+    delete[] numberBuffer;
+    return resultBuffer;
+}
+
+void _Sub() {
+    int op1  = machine->ReadRegister(4);
+    int op2  = machine->ReadRegister(5);
+    int res = op1-op2;
+    machine->WriteRegister(2,res);
+}
+
+void _CreateFile() {
+    int virtAddress;
+    char *filename;
+    DEBUG('a', "\n SC_CREATE call ..,");
+    DEBUG('a', "\n Reading virtual address of file name ...");
+    filename = new char[MaxFileLength];
+    virtAddress = machine->ReadRegister(4);
+    DEBUG('a', "\n Reading filename ...");
+    filename = UserToSystem(virtAddress, MaxFileLength + 1);
+    if (filename == NULL)
+    {
+        printf("\n Not enough memory in system ");
+        DEBUG('a', "\n Not engouh memory in system ");
+        machine->WriteRegister(2, -1);
+        delete[] filename;
+        break;
+    }
+    DEBUG('a', "\n Finish reading filename.");
+    if (!fileSystem->Create(filename, 0))
+    {
+        printf("\n Error create file %s", filename);
+        machine->WriteRegister(2, -1);
+        delete[] filename;
+        break;
+    }
+    printf("\n Create File %s\n", filename);
+    machine->WriteRegister(2, 0);
+    delete[] filename;
+
+}
+
+void _ReadInt() {
+    int number =0;
+    int nSize =0;
+    int i;
+    char *buffer = new char[MaxIntLength];
+    nSize = synchConsole->Read(buffer, MaxIntLength);
+    i = (buffer[0]=='-') ? 1 : 0;
+    for(;i<nSize;i++){
+        number*=10;
+        number+=buffer[i]-48;
+    }
+    number = (buffer[0]=='-') ? -1*number : number;
+    machine->WriteRegister(2, number);
+    delete[] buffer;
+}
+
+void _PrintInt() {
+    int number;
+    DEBUG('a', "\n SC_PrintInt call ..,");
+    DEBUG('a', "\n Reading virtual address of number ...");
+    number= machine->ReadRegister(4);
+    int nSize;
+    char * numberBuffer = new char[MaxIntLength];
+    numberBuffer = IntToChar(nSize, number);
+    synchConsole->Write(resultBuffer, nSize);
+    delete[] numberBuffer;
+}
+
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
@@ -116,88 +207,22 @@ void ExceptionHandler(ExceptionType which)
         }
         case SC_Sub:
         {
-            int op1  = machine->ReadRegister(4);
-            int op2  = machine->ReadRegister(5);
-            int res = op1-op2;
-            machine->WriteRegister(2,res);
+            _Sub();
             break;
         }
             case SC_Create:
         {
-            int virtAddress;
-            char *filename;
-            DEBUG('a', "\n SC_CREATE call ..,");
-            DEBUG('a', "\n Reading virtual address of file name ...");
-            filename = new char[MaxFileLength];
-            virtAddress = machine->ReadRegister(4);
-            DEBUG('a', "\n Reading filename ...");
-            filename = UserToSystem(virtAddress, MaxFileLength + 1);
-            if (filename == NULL)
-            {
-                printf("\n Not enough memory in system ");
-                DEBUG('a', "\n Not engouh memory in system ");
-                machine->WriteRegister(2, -1);
-                delete[] filename;
-                break;
-            }
-            DEBUG('a', "\n Finish reading filename.");
-            if (!fileSystem->Create(filename, 0))
-            {
-                printf("\n Error create file %s", filename);
-                machine->WriteRegister(2, -1);
-                delete[] filename;
-                break;
-            }
-            printf("\n Create File %s\n", filename);
-            machine->WriteRegister(2, 0);
-            delete[] filename;
+            _CreateFile();
             break;
         }
         case SC_ReadInt:
         {
-            int number =0;
-            int nSize =0;
-            int i;
-            char *buffer = new char[MaxIntLength];
-            nSize = synchConsole->Read(buffer, MaxIntLength);
-            i = (buffer[0]=='-') ? 1 : 0;
-            for(;i<nSize;i++){
-                number*=10;
-                number+=buffer[i]-48;
-            }
-            number = (buffer[0]=='-') ? -1*number : number;
-            machine->WriteRegister(2, number);
-            delete[] buffer;
+            _ReadInt();
             break;
         }
         case SC_PrintInt:
         {
-            int number;
-            DEBUG('a', "\n SC_PrintInt call ..,");
-            DEBUG('a', "\n Reading virtual address of number ...");
-            number= machine->ReadRegister(4);
-            char * numberBuffer = new char[MaxIntLength];
-            char * resultBuffer = new char[MaxIntLength];
-            int nSize; 
-            int i=0;
-            int check =0;
-            int count =0;
-            number < 0 ? (check=1,number*=-1,resultBuffer[i]='-',count=1) : 0;
-            while(number>0){
-                numberBuffer[i]=(number%10) + '0';
-                i++;
-                number/=10;
-            }
-            nSize=i;
-            for(int j=nSize-1;j>=0;j--){
-                resultBuffer[count]=numberBuffer[j];
-                count++;
-            }
-            resultBuffer[count]='\n';
-            nSize=count;
-            synchConsole->Write(resultBuffer, nSize+1);
-            delete[] numberBuffer;
-            delete[] resultBuffer;
+            _PrintInt();
             break;
         }
         }
