@@ -160,11 +160,12 @@ void ExceptionHandler(ExceptionType which)
             int i;
             char *buffer = new char[MaxIntLength];
             nSize = synchConsole->Read(buffer, MaxIntLength);
-            i = 0;
+            i = (buffer[0]=='-') ? 1 : 0;
             for(;i<nSize;i++){
                 number*=10;
                 number+=buffer[i]-48;
             }
+            number = (buffer[0]=='-') ? -1*number : number;
             machine->WriteRegister(2, number);
             delete[] buffer;
             break;
@@ -176,15 +177,27 @@ void ExceptionHandler(ExceptionType which)
             DEBUG('a', "\n Reading virtual address of number ...");
             number= machine->ReadRegister(4);
             char * numberBuffer = new char[MaxIntLength];
-            int nSize;
+            char * resultBuffer = new char[MaxIntLength];
+            int nSize; 
+            int i=0;
+            int check =0;
+            int count =0;
+            number < 0 ? (check=1,number*=-1,resultBuffer[i]='-',count=1) : 0;
             while(number>0){
                 numberBuffer[i]=(number%10) + '0';
                 i++;
                 number/=10;
             }
-            numberBuffer[i]='\n';
             nSize=i;
-            synchConsole->Write(numberBuffer, nSize);
+            for(int j=nSize-1;j>=0;j--){
+                resultBuffer[count]=numberBuffer[j];
+                count++;
+            }
+            resultBuffer[count]='\n';
+            nSize=count;
+            synchConsole->Write(resultBuffer, nSize);
+            delete[] numberBuffer;
+            delete[] resultBuffer;
             break;
         }
         }

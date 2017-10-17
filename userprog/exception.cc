@@ -195,7 +195,7 @@ void ExceptionHandler(ExceptionType which)
             }
             resultBuffer[count]='\n';
             nSize=count;
-            synchConsole->Write(resultBuffer, nSize);
+            synchConsole->Write(resultBuffer, nSize+1);
             delete[] numberBuffer;
             delete[] resultBuffer;
             break;
