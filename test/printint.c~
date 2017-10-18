@@ -1,6 +1,0 @@
-#include "syscall.h"
-
-int main(){
-    PrintInt(1234);
-    return 0;
-}
