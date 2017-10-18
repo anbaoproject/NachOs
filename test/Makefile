@@ -85,3 +85,13 @@ printint.o: printint.c
 printint: printint.o start.o
 	$(LD) $(LDFLAGS) start.o printint.o -o printint.coff
 	../bin/coff2noff printint.coff printint
+readchar.o: readchar.c
+	$(CC) $(CFLAGS) -c readchar.c
+readchar: readchar.o start.o
+	$(LD) $(LDFLAGS) start.o readchar.o -o readchar.coff
+	../bin/coff2noff readchar.coff readchar
+printchar.o: printchar.c
+	$(CC) $(CFLAGS) -c printchar.c
+printchar: printchar.o start.o
+	$(LD) $(LDFLAGS) start.o printchar.o -o printchar.coff
+	../bin/coff2noff printchar.coff printchar

@@ -32,6 +32,8 @@
 #define SC_Sub      11
 #define SC_ReadInt  12
 #define SC_PrintInt 13
+#define SC_ReadChar 14
+#define SC_PrintChar 15
 
 #ifndef IN_ASM
 
@@ -132,6 +134,10 @@ int Sub(int a, int b);
 int ReadInt();
 
 void PrintInt(int a);
+
+char ReadChar();
+
+void PrintChar(char a);
 
 
 

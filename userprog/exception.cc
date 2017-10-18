@@ -179,14 +179,28 @@ void _ReadInt() {
 
 void _PrintInt() {
     int number;
-    DEBUG('a', "\n SC_PrintInt call ..,");
-    DEBUG('a', "\n Reading virtual address of number ...");
     number= machine->ReadRegister(4);
     int nSize;
     char * numberBuffer = new char[MaxIntLength];
     numberBuffer = IntToChar(nSize, number);
     synchConsole->Write(numberBuffer, nSize);
     delete[] numberBuffer;
+}
+
+void _ReadChar() {
+    int size;
+    char* buffer;
+    buffer = new char [MaxIntLength];
+    size = synchConsole->Read(buffer, MaxIntLength);
+    machie->WriteRegister(2, buffer[0]);
+    delete[] buffer;
+}
+
+void _PrintChar(){
+    int cNumber;
+    cNumber = machine->ReadRegister(4);
+    char cResult = (char) cNumber;
+    synchConsole->Write(&cResult, 1);
 }
 
 void ExceptionHandler(ExceptionType which)
@@ -223,6 +237,16 @@ void ExceptionHandler(ExceptionType which)
         case SC_PrintInt:
         {
             _PrintInt();
+            break;
+        }
+        case SC_ReadChar:
+        {
+            _ReadChar();
+            break;
+        }
+        case SC_PrintChar:
+        {
+            _PrintChar();
             break;
         }
         }
