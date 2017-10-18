@@ -193,17 +193,14 @@ void _ReadChar() {
     size = synchConsole->Read(buffer, MaxIntLength);
     int nBuffer = buffer[0];
     delete[] buffer;
-    printf("%d", nBuffer);
-    machine->WriteRegister(2, buffer[size-1]);
+    machine->WriteRegister(2, nBuffer);
 }
 
 void _PrintChar(){
     char cBuffer;
     int nBuffer = machine->ReadRegister(4);
-    char * temp = new char[MaxIntLength];
-    temp[0]=nBuffer+'0';
-    synchConsole->Write(temp, 1);
-    delete[] temp;
+    cBuffer = (char) nBuffer;
+    synchConsole->Write(&cBuffer, 1);
 }
 
 void ExceptionHandler(ExceptionType which)
