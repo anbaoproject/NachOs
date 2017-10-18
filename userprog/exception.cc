@@ -189,18 +189,21 @@ void _PrintInt() {
 
 void _ReadChar() {
     int size;
-    char* buffer;
-    buffer = new char [MaxIntLength];
+    char * buffer = new char [MaxIntLength];
     size = synchConsole->Read(buffer, MaxIntLength);
-    machie->WriteRegister(2, buffer[0]);
+    int nBuffer = buffer[0];
     delete[] buffer;
+    printf("%d", nBuffer);
+    machine->WriteRegister(2, buffer[size-1]);
 }
 
 void _PrintChar(){
-    int cNumber;
-    cNumber = machine->ReadRegister(4);
-    char cResult = (char) cNumber;
-    synchConsole->Write(&cResult, 1);
+    char cBuffer;
+    int nBuffer = machine->ReadRegister(4);
+    char * temp = new char[MaxIntLength];
+    temp[0]=nBuffer+'0';
+    synchConsole->Write(temp, 1);
+    delete[] temp;
 }
 
 void ExceptionHandler(ExceptionType which)
