@@ -7,7 +7,8 @@ int main()
     int swapped = 1,temp=0;
     PrintString("Nhap so phan tu cua mang: ");
     size = ReadInt();
-    for (; i < size; i++)
+    PrintChar('\n');
+    for (i=0; i < size; i++)
     {
         array[i] = ReadInt();
     }
@@ -25,6 +26,7 @@ int main()
             }
         }
     }
+    PrintChar('\n');
     for(i=0;i<size;i++){
         PrintInt(array[i]);
         PrintChar(' ');
