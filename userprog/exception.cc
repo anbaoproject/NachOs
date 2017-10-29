@@ -27,6 +27,7 @@
 
 #define MaxFileLength 32
 #define MaxIntLength 9
+#define MaxStringLength 256
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the Nachos kernel.  Called when a user program
@@ -51,30 +52,27 @@
 //----------------------------------------------------------------------
 
 //Copy từ User space -> System Space
-char *UserToSystem(int virtAddress, int limit)
+
+
+char* UserToSystem(int virtAddr,int limit)
 {
-    int index;
-    int oneChar;
-    char *kernelBuffer = NULL;
-    kernelBuffer = new char[limit + 1];
-    if (kernelBuffer == NULL)
-    {
-        return kernelBuffer;
-    }
-    memset(kernelBuffer, 0, limit + 1);
-
-    for (int i = 0; i < limit; i++)
-    {
-        machine->ReadMem(virtAddress + i, 1, &oneChar);
-        kernelBuffer[i] = (char)oneChar;
-        printf("%c", oneChar);
-        if (oneChar == 0)
-        {
-            break;
-        }
-    }
-
-    return kernelBuffer;
+	int i;// index
+	int oneChar;
+	char* kernelBuf = NULL;
+	kernelBuf = new char[limit +1];//need for terminal string
+	if (kernelBuf == NULL)
+		return kernelBuf;
+	memset(kernelBuf,0,limit+1);
+	//printf("\n Filename u2s:");
+	for (i = 0 ; i < limit ;i++)
+	{
+		machine->ReadMem(virtAddr+i,1,&oneChar);
+		kernelBuf[i] = (char)oneChar;
+		//printf("%c",kernelBuf[i]);
+		if (oneChar == 0)
+			break;
+	}
+	return kernelBuf;
 }
 
 int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
@@ -248,6 +246,28 @@ void ExceptionHandler(ExceptionType which)
         {
             _PrintChar();
             break;
+        }
+ 	case SC_ReadString:
+        {
+
+		char* buffer = new char[MaxStringLength];
+		int length = synchConsole->Read(buffer,MaxStringLength);
+		int vAdrr = machine->ReadRegister(4);
+		int check = SystemToUser(vAdrr,length,buffer);
+                break;
+        }
+	case SC_PrintString:
+        {
+		int vAdrr = machine->ReadRegister(4);
+		char* buffer;
+		buffer = UserToSystem(vAdrr,256);
+		int i = 0;
+		while (buffer[i] != '\0')
+			i++;
+		synchConsole->Write(buffer,i);
+ 		machine->WriteRegister(2, 0);
+		break;
+
         }
         }
         //Avanced Program Counter
