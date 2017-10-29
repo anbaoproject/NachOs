@@ -63,12 +63,10 @@ char* UserToSystem(int virtAddr,int limit)
 	if (kernelBuf == NULL)
 		return kernelBuf;
 	memset(kernelBuf,0,limit+1);
-	//printf("\n Filename u2s:");
 	for (i = 0 ; i < limit ;i++)
 	{
 		machine->ReadMem(virtAddr+i,1,&oneChar);
 		kernelBuf[i] = (char)oneChar;
-		//printf("%c",kernelBuf[i]);
 		if (oneChar == 0)
 			break;
 	}
@@ -201,6 +199,25 @@ void _PrintChar(){
     synchConsole->Write(&cBuffer, 1);
 }
 
+void _ReadString(){
+    char* buffer = new char[MaxStringLength];
+    int length = synchConsole->Read(buffer,MaxStringLength);
+    int vAdrr = machine->ReadRegister(4);
+    int check = SystemToUser(vAdrr,length,buffer);
+}
+
+void _PrintString(){
+    int vAdrr = machine->ReadRegister(4);
+    char* buffer;
+    buffer = UserToSystem(vAdrr,256);
+    int i = 0;
+    while (buffer[i] != '\0' && buffer[i]!='\n')
+        i++;
+    synchConsole->Write(buffer,i);
+    synchConsole->Write('\n',1);
+    machine->WriteRegister(2, 0);
+}
+
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
@@ -249,23 +266,12 @@ void ExceptionHandler(ExceptionType which)
         }
  	case SC_ReadString:
         {
-
-		char* buffer = new char[MaxStringLength];
-		int length = synchConsole->Read(buffer,MaxStringLength);
-		int vAdrr = machine->ReadRegister(4);
-		int check = SystemToUser(vAdrr,length,buffer);
-                break;
+            _ReadString();
+        break;
         }
 	case SC_PrintString:
         {
-		int vAdrr = machine->ReadRegister(4);
-		char* buffer;
-		buffer = UserToSystem(vAdrr,256);
-		int i = 0;
-		while (buffer[i] != '\0')
-			i++;
-		synchConsole->Write(buffer,i);
- 		machine->WriteRegister(2, 0);
+            _PrintString();
 		break;
 
         }
