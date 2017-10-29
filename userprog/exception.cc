@@ -213,8 +213,8 @@ void _PrintString(){
     int i = 0;
     while (buffer[i] != '\0' && buffer[i]!='\n')
         i++;
-    synchConsole->Write(buffer,i);
-    synchConsole->Write('\n',1);
+    buffer[i]='\n';
+    synchConsole->Write(buffer,i+1);
     machine->WriteRegister(2, 0);
 }
 
