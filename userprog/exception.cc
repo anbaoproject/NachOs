@@ -211,7 +211,7 @@ void _PrintString(){
     char* buffer;
     buffer = UserToSystem(vAdrr,256);
     int i = 0;
-    while (buffer[i] != '\0' && buffer[i]!='\n')
+    while (buffer[i] != '\0')
         i++;
     buffer[i]='\n';
     synchConsole->Write(buffer,i+1);
