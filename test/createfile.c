@@ -6,9 +6,17 @@ int
 main(){
     OpenFileId id;
     int res;
-    id=Open("minhan",1);
-    PrintInt(0);
-    PrintInt(CloseFile(8));
+    char buffer[32];
+    id=Open("minhan.txt",1);
+    res=Read(buffer,32,id);
+    PrintString(char);
+    PrintInt(res);
+    PrintInt(CloseFile(id));
+    // OpenFileId id;
+    // int res;
+    // id=Open("minhan",1);
+    // PrintInt(0);
+    // PrintInt(CloseFile(8));
     
     /*char *filename[maxlen+1];
     PrintString("Input file's name:");
