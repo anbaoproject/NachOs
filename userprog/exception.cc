@@ -305,11 +305,15 @@ void _ReadFile()
     {
         int secondPos = fileSystem->file[id]->getCurrentPos();
         SystemToUser(bufferAdd, secondPos - firstPos + 1, buffer);
+
         if (secondPos == firstPos)
         {
             machine->WriteRegister(2, -2);
         }
-        machine->WriteRegister(2, -1);
+        else
+        {
+            machine->WriteRegister(2, -1);
+        }
     }
     delete[] buffer;
 }
