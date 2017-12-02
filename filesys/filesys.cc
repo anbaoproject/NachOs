@@ -152,6 +152,7 @@ FileSystem::FileSystem(bool format)
     index++;
     file[index] = this->Open("stdout", 3);
     index++;
+
 }
 
 //----------------------------------------------------------------------

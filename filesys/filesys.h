@@ -54,9 +54,7 @@ class FileSystem {
 		this->Create("stdin",0);
 		this->Create("stdout",0);
 		file[index]=this->Open("stdin",2);
-		index++;
 		file[index]=this->Open("stdout",3);
-		index++;
 	}
 	int getIndex(){
 		return index;
