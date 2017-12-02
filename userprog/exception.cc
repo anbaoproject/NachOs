@@ -372,14 +372,28 @@ void _Seek()
 {
     int pos = machine->ReadRegister(4);
     int OpenFileID = machine->ReadRegister(5);
-    fileSystem->file[fileSystem->getIndex()] = fileSystem->Open(filename, type);
-    if (openfile == NULL)
+    if (id < 0 || id > 10)
     {
         machine->WriteRegister(2, -1);
-        break;
+        delete[] buffer;
+        return;
     }
-    pos = openfile->Seek(pos);
-    machine->WriteRegister(2, pos);
+    if (fileSystem->file[id] == NULL)
+    {
+        machine->WriteRegister(2, -1);
+        delete[] buffer;
+        return;
+    }
+    pos == -1 ? pos = fileSystem->file[id]->Length() : pos;
+    if (pos > fileSystem->file[id]->Length() || pos < 0)
+    {
+        machine->WriteRegister(2, -1);
+    }
+    else
+    {
+        fileSystem->file[id]->Seek(pos);
+        machine->WriteRegister(2, pos);
+    }
 }
 
 void ExceptionHandler(ExceptionType which)
