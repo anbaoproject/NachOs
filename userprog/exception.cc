@@ -294,7 +294,7 @@ void _ReadFile()
         return;
     }
     int firstPos = fileSystem->file[id]->getCurrentPos();
-    int temp=fileSystem->file[id]->Read(buffer, size);
+    int temp = fileSystem->file[id]->Read(buffer, size);
     if (temp)
     {
         int secondPos = fileSystem->file[id]->getCurrentPos();
@@ -305,7 +305,8 @@ void _ReadFile()
     {
         int secondPos = fileSystem->file[id]->getCurrentPos();
         SystemToUser(bufferAdd, secondPos - firstPos + 1, buffer);
-        if(secondPos==firstPos){
+        if (secondPos == firstPos)
+        {
             machine->WriteRegister(2, -2);
         }
         machine->WriteRegister(2, -1);
@@ -319,7 +320,7 @@ void _WriteFile()
     int size = machine->ReadRegister(5);
     int id = machine->ReadRegister(6);
 
-    char* buffer = new char[size];
+    char *buffer = new char[size];
 
     if (id < 0 || id > 10)
     {
@@ -340,7 +341,7 @@ void _WriteFile()
         if (fileSystem->file[id]->Write(buffer, size) > 0)
         {
             int secondPos = fileSystem->file[id]->getCurrentPos();
-            if(secondPos==firstPos)
+            if (secondPos == firstPos)
             {
                 machine->WriteRegister(2, -2);
             }
@@ -354,13 +355,27 @@ void _WriteFile()
             i++;
         buffer[i] = '\n';
         synchConsole->Write(buffer, i + 1);
-        machine->WriteRegister(2, i-1);
+        machine->WriteRegister(2, i - 1);
     }
     if (fileSystem->file[id]->getType() == 1)
     {
         machine->WriteRegister(2, -1);
     }
     delete[] buffer;
+}
+
+void _Seek()
+{
+    int pos = machine->ReadRegister(4);
+    int OpenFileID = machine->ReadRegister(5);
+    fileSystem->file[fileSystem->getIndex()] = fileSystem->Open(filename, type);
+    if (openfile == NULL)
+    {
+        machine->WriteRegister(2, -1);
+        break;
+    }
+    pos = openfile->Seek(pos);
+    machine->WriteRegister(2, pos);
 }
 
 void ExceptionHandler(ExceptionType which)
@@ -437,6 +452,11 @@ void ExceptionHandler(ExceptionType which)
         case SC_Write:
         {
             _WriteFile();
+            break;
+        }
+        case SC_Seek:
+        {
+            _Seek();
             break;
         }
         }

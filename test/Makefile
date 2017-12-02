@@ -35,7 +35,7 @@ CPP = gcc -E
 INCDIR =-I../userprog -I../threads
 CFLAGS = -G 0 -c $(INCDIR)
 
-all: halt shell matmult sort createfile sub readint printint readchar printchar readstring printstring help ascii bubblesort
+all: halt shell matmult sort createfile sub readint printint readchar printchar readstring printstring help ascii bubblesort cat copy echo reverse
 
 start.o: start.s ../userprog/syscall.h
 	$(CPP) $(CPPFLAGS) start.c > strt.s
@@ -120,3 +120,27 @@ bubblesort.o: bubblesort.c
 bubblesort: bubblesort.o start.o 
 	$(LD) $(LDFLAGS) start.o bubblesort.o -o bubblesort.coff
 	../bin/coff2noff bubblesort.coff bubblesort
+
+cat.o: cat.c
+	$(CC) $(CFLAGS) -c cat.c
+cat: cat.o start.o
+	$(LD $(LDFLAGS) start.o cat.o -o cat.coff
+	../bin/coff2noff cat.coff cat 
+
+copy.o: copy.c
+	$(CC) $(CFLAGS) -c copy.c
+copy: copy.o start.o
+	$(LD $(LDFLAGS) start.o copy.o -o copy.coff
+	../bin/coff2noff copy.coff copy
+ 
+echo.o: echo.c
+	$(CC) $(CFLAGS) -c echo.c
+echo: echo.o start.o
+	$(LD $(LDFLAGS) start.o echo.o -o echo.coff
+	../bin/coff2noff echo.coff echo
+
+reverse.o: reverse.c
+	$(CC) $(CFLAGS) -c reverse.c
+reverse: reverse.o start.o
+	$(LD $(LDFLAGS) start.o reverse.o -o reverse.coff
+	../bin/coff2noff reverse.coff reverse
