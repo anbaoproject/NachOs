@@ -4,6 +4,6 @@
 int
 main()
 {
-	Create("CreateMe.txt");
+	CreateFile("CreateMe.txt");
 	return 0;
 }

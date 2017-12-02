@@ -44,8 +44,8 @@ int main ()
 		if(size == -1)
 		{
 			PrintString("Loi khi doc file\n");
-			Close(FileID1);
-			Close(FileID2);
+			CloseFile(FileID1);
+			CloseFile(FileID2);
 			return 1;
 		}
 		

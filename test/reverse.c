@@ -39,7 +39,7 @@ int main()
 		Read((char*)&buffer,1,fileID1);  // Doc du lieu
 		Write((char*)&buffer,1,fileID2); // Ghi du lieu
 	}
-	Close(fileID1);
-	Close(fileID2);
+	CloseFile(fileID1);
+	CloseFile(fileID2);
 	return 0;
 }

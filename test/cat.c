@@ -33,6 +33,6 @@ int main()
 		Seek(pos, FileID);
 	}
 
-	Close(FileID);
+	CloseFile(FileID);
 	return 0;
 }
