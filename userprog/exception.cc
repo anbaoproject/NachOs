@@ -236,6 +236,7 @@ void _OpenFile()
     {
         if (strcmp(filename, "stdin") == 0)
         {
+            printf("stdin");
             machine->WriteRegister(2, 0);
         }
         if (strcmp(filename, "stdout") == 0)

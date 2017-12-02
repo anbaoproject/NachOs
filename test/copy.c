@@ -28,7 +28,7 @@ int main ()
 	
 	if (FileID2 == -1)
 	{
-		Create(destination);
+		CreateFile(destination);
 		FileID2 = Open(destination,0); // Mo file dich de ghi
 	}
 	
@@ -53,7 +53,7 @@ int main ()
 		// Di chuyen con tro toi vi tri tiep theo can ghi
 		Seek(pos, FileID2);
 		Write(buffer,MaxBuffer,FileID2); 
-
+		printf("%d", pos);
 		// Vi tri con tro tiep theo
 		pos += size;
 		i++;
