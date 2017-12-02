@@ -4,7 +4,7 @@
 #define maxlen 32
 int 
 main(){
-    int len;
+    OpenFileId id;
     char *filename[maxlen+1];
     PrintString("Input file's name:");
     ReadString(filename,maxlen);
@@ -12,9 +12,9 @@ main(){
         PrintString("Error when create file");
     }else{
         PrintString("Create file succesfull");
-        int id =Open(filename,1);
-	    PrintInt(id);
-        PrintInt(Close(id))
+ 	id=Open(filename,1);
+	PrintInt(id);
+	Close(id);
     }
     return 0;
 }
