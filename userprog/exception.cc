@@ -294,7 +294,8 @@ void _ReadFile()
         return;
     }
     int firstPos = fileSystem->file[id]->getCurrentPos();
-    if (fileSystem->file[id]->Read(buffer, size))
+    int temp=fileSystem->file[id]->Read(buffer, size);
+    if (temp)
     {
         int secondPos = fileSystem->file[id]->getCurrentPos();
         SystemToUser(bufferAdd, secondPos - firstPos + 1, buffer);
@@ -302,6 +303,7 @@ void _ReadFile()
     }
     else
     {
+        int secondPos = fileSystem->file[id]->getCurrentPos();
         machine->WriteRegister(2, -1);
     }
     delete[] buffer;
