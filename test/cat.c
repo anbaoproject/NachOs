@@ -5,14 +5,16 @@
 //Chuong trinh yeu cau nhap vao ten file roi hien thi noi dung cua file do
 int main()
 {
-	int FileID, type, size, pos = 0;
+	int type, size, pos = 0;
 	char fileName[MaxFileName], buffer[MaxBuffer]; 
+	OpenFileId id;
+
 
 	PrintString("Nhap vao ten file: ");
 	ReadString(fileName,MaxFileName); //Nhap ten chuoi tu console
 
-	FileID	= Open(fileName,1); //Mo file chi doc
-	if (FileID == -1)
+	id	= Open(fileName,1); //Mo file chi doc
+	if (id == -1)
 	{
 		PrintString("Loi mo file. Kiem tra lai ten file");
 		return 0;
@@ -20,19 +22,20 @@ int main()
 
 	while(1)
 	{
-		size = Read(buffer,MaxBuffer,FileID);
+		
+		size = Read(buffer,MaxBuffer,id);
 		pos += size;
 		if(size == -1)
 		{
 			PrintString("Doc file loi \n");
-			Close(FileID); 
+			CloseFile(id);
 			return 1;
 		}
 		if(size == -2)
 			break; // Ket thuc file
-		Seek(pos, FileID);
+		Seek(pos, id);
 	}
 
-	CloseFile(FileID);
+	CloseFile(id);
 	return 0;
 }

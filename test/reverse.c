@@ -8,7 +8,8 @@
 int main()
 {
 	char souFile[MaxFileName], disFile[MaxFileName], buffer;
-	int fileID1, fileID2, fend;
+	int fend;
+	OpenFileId  fileID1, fileID2;
 
 	PrintString("Nhap vao ten file nguon: ");
 	ReadString(souFile,MaxFileName);
