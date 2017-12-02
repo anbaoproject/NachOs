@@ -283,7 +283,7 @@ void _ReadFile(){
         delete[] buffer;
         return;
     }
-    if(fileSystem->file[id]->type==2){
+    if(fileSystem->file[id]->getType()==2){
         int cSize = synchConsole->Read(buffer,size);
         SystemToUser(bufferAdd,cSize,buffer);
         machine->WriteRegister(2,cSize);
@@ -293,7 +293,7 @@ void _ReadFile(){
     if(fileSystem->file[id]->Read(buffer,size)){
         int secondPos = fileSystem->file[id]->getCurrentPos();
         SystemToUser(bufferAdd,secondPos-firstPos+1,buffer);
-        machine->WriteRegister(2,secosecondPos-firstPos+1);
+        machine->WriteRegister(2,secondPos-firstPos+1);
     }else{
          machine->WriteRegister(2,-1);
     }
