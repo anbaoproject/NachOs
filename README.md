@@ -1,11 +1,7 @@
 # NachOs
 ### TO DO LIST
-1. Ân:
-	* Read Int   **done**
-	* Print Int **done**
-	* Read Char **done**
-	* Print Char **done**
-2. Bảo:
-	* Read String
-	* Print String 
+CreateFile done
+OpenFileID
+Read/Write
+Seek
 ##### Muốn thay đổi nhớ báo 
