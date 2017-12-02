@@ -28,7 +28,7 @@
 					// See definitions listed under #else
 class OpenFile {
   public:
-    OpenFile(int f) { file = f; currentOffset = 0; type=0}	// open the file
+    OpenFile(int f) { file = f; currentOffset = 0; type=0;}	// open the file
 		OpenFile(int f, int _type) {
 			file=f;
 			currentOffset = 0;
