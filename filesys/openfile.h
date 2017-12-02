@@ -84,6 +84,10 @@ public:
 		return currentOffset;
 	}
 
+	int getType(){
+		return type;
+	}
+
 private:
 	int file;
 	int currentOffset;
@@ -102,6 +106,8 @@ public:
 	~OpenFile(); // Close the file
 
 	int getCurrentPos();
+
+	int getType();
 
 	void Seek(int position); // Set the position from which to
 													 // start reading/writing -- UNIX lseek
