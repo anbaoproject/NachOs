@@ -6,7 +6,11 @@ int
 main(){
     OpenFileId id;
     int res;
-    char *filename[maxlen+1];
+    id=Open("minhan",1);
+    PrintInt(0);
+    PrintInt(CloseFile(8));
+    
+    /*char *filename[maxlen+1];
     PrintString("Input file's name:");
     ReadString(filename,maxlen);
     if(CreateFile(filename)==-1){
@@ -17,6 +21,6 @@ main(){
 	PrintInt(id);
 	res=CloseFile(id);
         PrintInt(res);
-    }
+    }*/
     return 0;
 }

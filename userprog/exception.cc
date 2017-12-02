@@ -256,14 +256,17 @@ void _OpenFile()
 
 void _CloseFile()
 {
+    printf("Close Fileeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee \n");
     int id = machine->ReadRegister(4);
     if (fileSystem->file[id] == NULL)
     {
         machine->WriteRegister(2, -1);
+        return;
     }
+    printf("Close\n");   
+    machine->WriteRegister(2, 0);
     delete fileSystem->file[id];
     fileSystem->file[id] = NULL;
-    machine->WriteRegister(2, 0);
 }
 
 void ExceptionHandler(ExceptionType which)
