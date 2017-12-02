@@ -51,6 +51,7 @@ class FileSystem {
 		for(int i=0;i<10;i++){
 			file[i]=NULL;
 		}
+		printf("fs: %d ", index);
 		this->Create("stdin",0);
 		this->Create("stdout",0);
 		file[index]=this->Open("stdin",2);
