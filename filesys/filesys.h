@@ -44,9 +44,9 @@
 class FileSystem {
     int index;
   public:
-  	OpenFile *file[10];
-    OpenFile *file[10];
+  	OpenFile **file;
     FileSystem(bool format) {
+		file = new OpenFile*[10];
 		index=0;
 		for(int i=0;i<10;i++){
 			file[i]=NULL;
@@ -91,6 +91,7 @@ class FileSystem {
 class FileSystem {
 	int index;
   public:
+    OpenFile **file;
     FileSystem(bool format);		// Initialize the file system.
 					// Must be called *after* "synchDisk" 
 					// has been initialized.

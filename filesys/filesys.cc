@@ -144,6 +144,8 @@ FileSystem::FileSystem(bool format)
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
     }
+    file = new OpenFile*[10];
+    index=0;
     this->Create("stdin", 0);
     this->Create("stdout", 0);
     file[index] = this->Open("stdin", 2);
