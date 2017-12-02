@@ -196,6 +196,7 @@ void _ReadString(){
     int length = synchConsole->Read(buffer,MaxStringLength);
     int vAdrr = machine->ReadRegister(4);
     int check = SystemToUser(vAdrr,length,buffer);
+    delete [] buffer;
 }
 
 void _PrintString(){
@@ -208,6 +209,30 @@ void _PrintString(){
     buffer[i]='\n';
     synchConsole->Write(buffer,i+1);
     machine->WriteRegister(2, 0);
+}
+
+void _OpenFile(){
+    char * filename new char[MaxStringLength];
+    int bufferAdd = machine->ReadRegister(4);
+    int type = machine->ReadRegister(5);
+    filename = UserToSystem(bufferAdd, MaxFileLength+1);
+    if(fileSystem->getIndex()>10){
+        machine->WriteRegister(2,-1);
+    }else{
+        if(strcmp(filename,"stdin")==0){
+            machine->WriteRegister(2,0);
+        }
+        if(strcmp(filename,"stdout")==0){
+            machine->WriteRegister(2,1);
+        }
+        fileSystem->file[fileSystem->getIndex()]= fileSystem->Open(filename);
+        if(fileSystem!=NULL){
+            machine->WriteRegister(2,fileSystem->getIndex()-1);
+        }else{
+            machine->WriteRegister(2,-1);
+        }
+    }
+    delete[] buf;
 }
 
 void ExceptionHandler(ExceptionType which)
@@ -265,7 +290,11 @@ void ExceptionHandler(ExceptionType which)
         {
             _PrintString();
 		break;
-
+        }
+        case SC_OPen:
+        {
+            _OpenFile();
+            break;
         }
         }
         //Avanced Program Counter

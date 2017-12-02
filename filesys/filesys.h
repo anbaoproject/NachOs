@@ -42,9 +42,25 @@
 				// calls to UNIX, until the real file system
 				// implementation is available
 class FileSystem {
+    int index;
   public:
-    FileSystem(bool format) {}
-
+  	OpenFile *file[10];
+    OpenFile *file[10];
+    FileSystem(bool format) {
+		index=0;
+		for(int i=0;i<10;i++){
+			file[i]=NULL;
+		}
+		this->Create("stdin",0);
+		this->Create("stdout",0);
+		file[index]=this->Open("stdin",2);
+		index++;
+		file[index]=this->Open("stdout",3);
+		index++;
+	}
+	int getIndex(){
+		return index;
+	}
     bool Create(char *name, int initialSize) { 
 	int fileDescriptor = OpenForWrite(name);
 
@@ -57,6 +73,7 @@ class FileSystem {
 	  int fileDescriptor = OpenForReadWrite(name, FALSE);
 
 	  if (fileDescriptor == -1) return NULL;
+	  index++;
 	  return new OpenFile(fileDescriptor);
       }
 
@@ -66,6 +83,7 @@ class FileSystem {
 
 #else // FILESYS
 class FileSystem {
+	int index;
   public:
     FileSystem(bool format);		// Initialize the file system.
 					// Must be called *after* "synchDisk" 
@@ -76,6 +94,8 @@ class FileSystem {
 
     bool Create(char *name, int initialSize);  	
 					// Create a file (UNIX creat)
+
+	int getIndex();
 
     OpenFile* Open(char *name); 	// Open a file (UNIX open)
 
