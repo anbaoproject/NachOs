@@ -42,7 +42,9 @@ OpenFile::OpenFile(int sector, int _type){
     type=_type;
 }
 
-
+int OpenFile::getCurrentPos(){
+    return seekPosition;
+}
 //----------------------------------------------------------------------
 // OpenFile::~OpenFile
 // 	Close a Nachos file, de-allocating any in-memory data structures.

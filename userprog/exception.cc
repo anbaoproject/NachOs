@@ -102,7 +102,7 @@ char *IntToChar(int &sizeBuffer, int number)
     int check = 0;
     int count = 0;
     number < 0 ? (check = 1, number *= -1, resultBuffer[i] = '-', count = 1) : 0;
-    number==0 ? (resultBuffer[i]='0', count =1):0;
+    number == 0 ? (resultBuffer[i] = '0', count = 1) : 0;
     while (number > 0)
     {
         numberBuffer[i] = (number % 10) + '0';
@@ -257,17 +257,47 @@ void _OpenFile()
 
 void _CloseFile()
 {
-    printf("Close Fileeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee \n");
     int id = machine->ReadRegister(4);
     if (fileSystem->file[id] == NULL)
     {
         machine->WriteRegister(2, -1);
         return;
     }
-    printf("Close\n");   
     machine->WriteRegister(2, 0);
     delete fileSystem->file[id];
     fileSystem->file[id] = NULL;
+}
+
+void _ReadFile(){
+    int bufferAdd = machine->ReadRegister(4);
+    int size = machine->ReadRegister(5);
+    int id = machine->ReadRegister(6);
+    char *buffer = new char[size];
+    if(id<0||id>10){
+        machine->WriteRegister(2,-1);
+        delete[] buffer;
+        return;
+    }
+    if(fileSystem->file[id]==NULL){
+        machine->WriteRegister(2,-1);
+        delete[] buffer;
+        return;
+    }
+    if(fileSystem->file[id]->type==2){
+        int cSize = synchConsole->Read(buffer,size);
+        SystemToUser(bufferAdd,cSize,buffer);
+        machine->WriteRegister(2,cSize);
+        return;
+    }
+    int firstPos = fileSystem->file[id]->getCurrentPos();
+    if(fileSystem->file[id]->Read(buffer,size)){
+        int secondPos = fileSystem->file[id]->getCurrentPos();
+        SystemToUser(bufferAdd,secondPos-firstPos+1,buffer);
+        machine->WriteRegister(2,secosecondPos-firstPos+1);
+    }else{
+         machine->WriteRegister(2,-1);
+    }
+    delete[] buffer;
 }
 
 void ExceptionHandler(ExceptionType which)
@@ -334,6 +364,11 @@ void ExceptionHandler(ExceptionType which)
         case SC_Close:
         {
             _CloseFile();
+            break;
+        }
+        case SC_Read:
+        {
+            _ReadFile();
             break;
         }
         }
