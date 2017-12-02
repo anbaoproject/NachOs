@@ -264,12 +264,12 @@ void ExceptionHandler(ExceptionType which)
             _PrintChar();
             break;
         }
- 	case SC_ReadString:
+		case SC_ReadString:
         {
             _ReadString();
         break;
         }
-	case SC_PrintString:
+		case SC_PrintString:
         {
             _PrintString();
 		break;
