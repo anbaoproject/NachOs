@@ -14,7 +14,7 @@ main(){
         PrintString("Create file succesfull");
  	id=Open(filename,1);
 	PrintInt(id);
-	Close(id);
+	PrintInt(Close(id));
     }
     return 0;
 }
