@@ -55,10 +55,8 @@ class FileSystem {
 		this->Create("stdin",0);
 		this->Create("stdout",0);
 		file[index]=this->Open("stdin",2);
-		index++;
 		file[index]=this->Open("stdout",3);
-		index++;
-		printf("debug %d", fileSystem->getIndex());
+		printf("fs %d", index);
 	}
 	int getIndex(){
 		return index;
