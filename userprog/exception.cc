@@ -227,7 +227,6 @@ void _OpenFile()
     int bufferAdd = machine->ReadRegister(4);
     int type = machine->ReadRegister(5);
     filename = UserToSystem(bufferAdd, MaxFileLength + 1);
-    printf("debug %d", fileSystem->getIndex());
     if (fileSystem->getIndex() > 10)
     {
         machine->WriteRegister(2, -1);
@@ -243,7 +242,6 @@ void _OpenFile()
             machine->WriteRegister(2, 1);
         }
         fileSystem->file[fileSystem->getIndex()] = fileSystem->Open(filename, type);
-        printf("debug %d", fileSystem->getIndex());
         if (fileSystem != NULL)
         {
             machine->WriteRegister(2, fileSystem->getIndex() - 1);
@@ -254,6 +252,18 @@ void _OpenFile()
         }
     }
     delete[] filename;
+}
+
+void _CloseFile()
+{
+    int id = machine->ReadRegister(4);
+    if (fileSystem->file[id] == NULL)
+    {
+        machine->WriteRegister(2, -1);
+    }
+    delete fileSystem->file[id];
+    fileSystem->file[id] = NULL;
+    machine->WriteRegister(2, 0);
 }
 
 void ExceptionHandler(ExceptionType which)
@@ -317,6 +327,11 @@ void ExceptionHandler(ExceptionType which)
             _OpenFile();
             break;
         }
+        case SC_Close:
+        {
+            _CloseFile();
+            break;
+        }
         }
         //Avanced Program Counter
         machine->registers[PrevPCReg] = machine->registers[PCReg];
@@ -349,6 +364,10 @@ void ExceptionHandler(ExceptionType which)
         break;
     case IllegalInstrException:
         printf("Unimplemented or reserved instr %d %d \n", which, type);
+        ASSERT(FALSE);
+        break;
+    case NumExceptionTypes:
+        printf("NumExceptionTypes");
         ASSERT(FALSE);
         break;
     case NoException:

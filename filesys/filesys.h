@@ -51,14 +51,12 @@ class FileSystem {
 		for(int i=0;i<10;i++){
 			file[i]=NULL;
 		}
-		printf("fs: %d ", index);
 		this->Create("stdin",0);
 		this->Create("stdout",0);
 		file[index]=this->Open("stdin",2);
 		index++;
 		file[index]=this->Open("stdout",3);
 		index++;
-		printf("debug %d", fileSystem->getIndex());
 	}
 	int getIndex(){
 		return index;
