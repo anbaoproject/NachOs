@@ -102,6 +102,7 @@ char *IntToChar(int &sizeBuffer, int number)
     int check = 0;
     int count = 0;
     number < 0 ? (check = 1, number *= -1, resultBuffer[i] = '-', count = 1) : 0;
+    number==0 ? (resultBuffer[i]='0', count =1):0;
     while (number > 0)
     {
         numberBuffer[i] = (number % 10) + '0';
