@@ -225,7 +225,7 @@ void _OpenFile(){
         if(strcmp(filename,"stdout")==0){
             machine->WriteRegister(2,1);
         }
-        fileSystem->file[fileSystem->getIndex()]= fileSystem->Open(filename);
+        fileSystem->file[fileSystem->getIndex()]= fileSystem->Open(filename,type);
         if(fileSystem!=NULL){
             machine->WriteRegister(2,fileSystem->getIndex()-1);
         }else{
