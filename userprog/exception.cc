@@ -129,29 +129,21 @@ void _Sub() {
 void _CreateFile() {
     int virtAddress;
     char *filename;
-    DEBUG('a', "\n SC_CREATE call ..,");
-    DEBUG('a', "\n Reading virtual address of file name ...");
     filename = new char[MaxFileLength];
     virtAddress = machine->ReadRegister(4);
-    DEBUG('a', "\n Reading filename ...");
     filename = UserToSystem(virtAddress, MaxFileLength + 1);
     if (filename == NULL)
     {
-        printf("\n Not enough memory in system ");
-        DEBUG('a', "\n Not engouh memory in system ");
         machine->WriteRegister(2, -1);
         delete[] filename;
         return;
     }
-    DEBUG('a', "\n Finish reading filename.");
     if (!fileSystem->Create(filename, 0))
     {
-        printf("\n Error create file %s", filename);
         machine->WriteRegister(2, -1);
         delete[] filename;
         return;
     }
-    printf("\n Create File %s\n", filename);
     machine->WriteRegister(2, 0);
     delete[] filename;
 

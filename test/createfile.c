@@ -5,11 +5,13 @@
 int 
 main(){
     int len;
-    char filename[maxlen+1];
-    if(Create("text_1.txt")==-1){
-        //printf("Error when create file");
+    char *filename[maxlen+1];
+    PrintString("Input file's name:");
+    ReadString(filename,maxlen);
+    if(CreateFile(filename)==-1){
+        PrintString("Error when create file");
     }else{
-        //printf("Create file succesfull");
+        PrintString("Create file succesfull");
     }
     return 0;
 }
