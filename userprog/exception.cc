@@ -302,6 +302,11 @@ void _ReadFile()
     }
     else
     {
+        int secondPos = fileSystem->file[id]->getCurrentPos();
+        SystemToUser(bufferAdd, secondPos - firstPos + 1, buffer);
+        if(secondPos==firstPos){
+            machine->WriteRegister(2, -2);
+        }
         machine->WriteRegister(2, -1);
     }
     delete[] buffer;
@@ -334,6 +339,10 @@ void _WriteFile()
         if (fileSystem->file[id]->Write(buffer, size) > 0)
         {
             int secondPos = fileSystem->file[id]->getCurrentPos();
+            if(secondPos==firstPos)
+            {
+                machine->WriteRegister(2, -2);
+            }
             machine->WriteRegister(2, secondPos - firstPos + 1);
         }
     }
