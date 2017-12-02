@@ -6,12 +6,15 @@ int
 main(){
     OpenFileId id;
     int res;
-    char *buffer[32];
+    char *buffer[100];
     id=Open("minhan.txt",1);
-    res=Read(buffer,32,id);
-    PrintString(buffer);
+    res=Read(buffer,100,id);
     PrintInt(res);
-    PrintInt(CloseFile(id));
+    PrintString(buffer);
+    res=Read(buffer,100,id);
+    PrintInt(res);
+    PrintString(buffer);
+    CloseFile(id);
     // OpenFileId id;
     // int res;
     // id=Open("minhan",1);
