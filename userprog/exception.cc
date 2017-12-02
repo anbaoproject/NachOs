@@ -268,34 +268,87 @@ void _CloseFile()
     fileSystem->file[id] = NULL;
 }
 
-void _ReadFile(){
+void _ReadFile()
+{
     int bufferAdd = machine->ReadRegister(4);
     int size = machine->ReadRegister(5);
     int id = machine->ReadRegister(6);
     char *buffer = new char[size];
-    if(id<0||id>10){
-        machine->WriteRegister(2,-1);
+    if (id < 0 || id > 10)
+    {
+        machine->WriteRegister(2, -1);
         delete[] buffer;
         return;
     }
-    if(fileSystem->file[id]==NULL){
-        machine->WriteRegister(2,-1);
+    if (fileSystem->file[id] == NULL)
+    {
+        machine->WriteRegister(2, -1);
         delete[] buffer;
         return;
     }
-    if(fileSystem->file[id]->getType()==2){
-        int cSize = synchConsole->Read(buffer,size);
-        SystemToUser(bufferAdd,cSize,buffer);
-        machine->WriteRegister(2,cSize);
+    if (fileSystem->file[id]->getType() == 2)
+    {
+        int cSize = synchConsole->Read(buffer, size);
+        SystemToUser(bufferAdd, cSize, buffer);
+        machine->WriteRegister(2, cSize);
         return;
     }
     int firstPos = fileSystem->file[id]->getCurrentPos();
-    if(fileSystem->file[id]->Read(buffer,size)){
+    if (fileSystem->file[id]->Read(buffer, size))
+    {
         int secondPos = fileSystem->file[id]->getCurrentPos();
-        SystemToUser(bufferAdd,secondPos-firstPos+1,buffer);
-        machine->WriteRegister(2,secondPos-firstPos+1);
-    }else{
-         machine->WriteRegister(2,-1);
+        SystemToUser(bufferAdd, secondPos - firstPos + 1, buffer);
+        machine->WriteRegister(2, secondPos - firstPos + 1);
+    }
+    else
+    {
+        machine->WriteRegister(2, -1);
+    }
+    delete[] buffer;
+}
+
+void _WriteFile()
+{
+    int bufferAdd = machine->ReadRegister(4);
+    int size = machine->ReadRegister(5);
+    int id = machine->ReadRegister(6);
+
+    char buffer = new char[size];
+
+    if (id < 0 || id > 10)
+    {
+        machine->WriteRegister(2, -1);
+        delete[] buffer;
+        return;
+    }
+    if (fileSystem->file[id] == NULL)
+    {
+        machine->WriteRegister(2, -1);
+        delete[] buffer;
+        return;
+    }
+    int firstPos = fileSystem->file[id]->getCurrentPos();
+    UserToSystem(bufferAdd, size);
+    if (fileSystem->file[id]->getType() == 0 || fileSystem->file[id]->getType() == 3)
+    {
+        if (fileSystem->file[id]->Write(buffer, size) > 0)
+        {
+            int secondPos = fileSystem->file[id]->getCurrentPos();
+            machine->WriteRegister(2, secondPos - firstPos + 1);
+        }
+    }
+    if (fileSystem->file[id]->getType() == 3)
+    {
+        int i = 0;
+        while (buffer[i] != '\0')
+            i++;
+        buffer[i] = '\n';
+        synchConsole->Write(buffer, i + 1);
+        machine->WriteRegister(2, i-1);
+    }
+    if (fileSystem->file[id]->getType() == 1)
+    {
+        machine->WriteRegister(2, -1);
     }
     delete[] buffer;
 }
@@ -369,6 +422,11 @@ void ExceptionHandler(ExceptionType which)
         case SC_Read:
         {
             _ReadFile();
+            break;
+        }
+        case SC_Write:
+        {
+            _WriteFile();
             break;
         }
         }

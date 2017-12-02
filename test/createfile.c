@@ -6,7 +6,7 @@ int
 main(){
     OpenFileId id;
     int res;
-    char buffer[32];
+    char * buffer[32];
     id=Open("minhan.txt",1);
     res=Read(buffer,32,id);
     PrintString(char);
