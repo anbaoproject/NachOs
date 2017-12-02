@@ -313,7 +313,7 @@ void _WriteFile()
     int size = machine->ReadRegister(5);
     int id = machine->ReadRegister(6);
 
-    char buffer = new char[size];
+    char* buffer = new char[size];
 
     if (id < 0 || id > 10)
     {
