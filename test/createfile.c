@@ -7,7 +7,7 @@ main(){
     OpenFileId id;
     int res;
     char *buffer[100];
-    id=Open("minhanaa.txt",1);
+    id=Open("minhan.txt",1);
     res=Read(buffer,100,id);
     PrintInt(res);
     PrintString(buffer);
