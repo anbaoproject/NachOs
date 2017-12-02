@@ -8,8 +8,7 @@
 int main()
 {
 	char souFile[MaxFileName], disFile[MaxFileName], buffer;
-	int fend;
-	OpenFileId  fileID1, fileID2;
+	int fileID1, fileID2, fend;
 
 	PrintString("Nhap vao ten file nguon: ");
 	ReadString(souFile,MaxFileName);
@@ -27,7 +26,7 @@ int main()
 
 	if (fileID2 == -1)
 	{
-		Create(disFile);
+		CreateFile(disFile);
 		fileID2 = Open(disFile,0); // Mo file dich de ghi
 	}
 

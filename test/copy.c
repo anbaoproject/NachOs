@@ -8,8 +8,7 @@ int main ()
 {
 	
 	char source[MaxFileName], destination[MaxFileName], buffer[MaxBuffer];
-	int  size = 0, pos = 0, i = 0;
-	OpenFileId FileID1, FileID2;
+	int FileID1, FileID2, size = 0, pos = 0, i = 0;
 
 	PrintString("Nhap vao ten file nguon: ");
 	ReadString(source,MaxFileName);
@@ -37,6 +36,7 @@ int main ()
 		// Di chuyen con tro toi vi tri tiep theo can doc
 		Seek(pos, FileID1);
 		size = Read(buffer,MaxBuffer,FileID1);
+		PrintString(buffer);
 
 		//Het file
 		if(size == -2)
@@ -53,13 +53,13 @@ int main ()
 		// Di chuyen con tro toi vi tri tiep theo can ghi
 		Seek(pos, FileID2);
 		Write(buffer,MaxBuffer,FileID2); 
-		printf("%d", pos);
+
 		// Vi tri con tro tiep theo
-		pos += size;
+		pos += (size-1);
 		i++;
 	}
 	PrintString("Do dai: = "); PrintInt(i);
-	Close(FileID1);
-	Close(FileID2);
+	CloseFile(FileID1);
+	CloseFile(FileID2);
 	return 0;
 }

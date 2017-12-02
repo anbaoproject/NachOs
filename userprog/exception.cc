@@ -236,12 +236,15 @@ void _OpenFile()
     {
         if (strcmp(filename, "stdin") == 0)
         {
-            printf("stdin");
             machine->WriteRegister(2, 0);
+	    delete[] filename;
+            return;
         }
         if (strcmp(filename, "stdout") == 0)
         {
             machine->WriteRegister(2, 1);
+	    delete[] filename;
+            return;
         }
         fileSystem->file[fileSystem->getIndex()] = fileSystem->Open(filename, type);
         if (fileSystem != NULL)
@@ -292,6 +295,7 @@ void _ReadFile()
         int cSize = synchConsole->Read(buffer, size);
         SystemToUser(bufferAdd, cSize, buffer);
         machine->WriteRegister(2, cSize);
+	delete[] buffer;
         return;
     }
     int firstPos = fileSystem->file[id]->getCurrentPos();
@@ -340,7 +344,7 @@ void _WriteFile()
         return;
     }
     int firstPos = fileSystem->file[id]->getCurrentPos();
-    UserToSystem(bufferAdd, size);
+    buffer=UserToSystem(bufferAdd, size);
     if (fileSystem->file[id]->getType() == 0 || fileSystem->file[id]->getType() == 3)
     {
         if (fileSystem->file[id]->Write(buffer, size) > 0)
@@ -359,7 +363,7 @@ void _WriteFile()
         while (buffer[i] != '\0')
             i++;
         buffer[i] = '\n';
-        synchConsole->Write(buffer, i + 1);
+        synchConsole->Write(buffer,i+1);
         machine->WriteRegister(2, i - 1);
     }
     if (fileSystem->file[id]->getType() == 1)
