@@ -79,8 +79,8 @@ public:
 	}
 
 	int Seek(int position){
-		Lseek(file,0,2);
-		len = Tell(file);
+		Lseek(file,position,0);
+		currentOffset = Tell(file);
 		return currentOffset;
 	}
 
