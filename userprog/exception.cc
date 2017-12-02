@@ -291,7 +291,7 @@ void ExceptionHandler(ExceptionType which)
             _PrintString();
 		break;
         }
-        case SC_OPen:
+        case SC_Open:
         {
             _OpenFile();
             break;
