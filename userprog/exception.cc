@@ -251,7 +251,7 @@ void _OpenFile()
             machine->WriteRegister(2, -1);
         }
     }
-    delete[] buf;
+    delete[] filename;
 }
 
 void ExceptionHandler(ExceptionType which)
