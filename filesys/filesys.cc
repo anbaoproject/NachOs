@@ -144,8 +144,8 @@ FileSystem::FileSystem(bool format)
         freeMapFile = new OpenFile(FreeMapSector);
         directoryFile = new OpenFile(DirectorySector);
     }
-    file = new OpenFile*[10];
-    index=0;
+    file = new OpenFile *[10];
+    index = 0;
     this->Create("stdin", 0);
     this->Create("stdout", 0);
     file[index] = this->Open("stdin", 2);
@@ -228,7 +228,8 @@ bool FileSystem::Create(char *name, int initialSize)
     return success;
 }
 
-int FileSystem::getIndex(){
+int FileSystem::getIndex()
+{
     return index;
 }
 
@@ -261,7 +262,8 @@ FileSystem::Open(char *name)
     return openFile; // return NULL if not found
 }
 
-	OpenFile* FileSystem::Open(char *name, int _type){
+OpenFile *FileSystem::Open(char *name, int _type)
+{
     Directory *directory = new Directory(NumDirEntries);
     OpenFile *openFile = NULL;
     int sector;
@@ -271,12 +273,12 @@ FileSystem::Open(char *name)
     sector = directory->Find(name);
     if (sector >= 0)
     {
-        openFile = new OpenFile(sector,_type);
+        openFile = new OpenFile(sector, _type);
         index++;
     }
     delete directory;
-    return openFile; 
-    }
+    return openFile;
+}
 
 //----------------------------------------------------------------------
 // FileSystem::Remove

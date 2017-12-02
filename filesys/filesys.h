@@ -58,6 +58,7 @@ class FileSystem {
 		index++;
 		file[index]=this->Open("stdout",3);
 		index++;
+		printf("debug %d", fileSystem->getIndex());
 	}
 	int getIndex(){
 		return index;
