@@ -53,24 +53,23 @@
 
 //Copy từ User space -> System Space
 
-
-char* UserToSystem(int virtAddr,int limit)
+char *UserToSystem(int virtAddr, int limit)
 {
-	int i;// index
-	int oneChar;
-	char* kernelBuf = NULL;
-	kernelBuf = new char[limit +1];//need for terminal string
-	if (kernelBuf == NULL)
-		return kernelBuf;
-	memset(kernelBuf,0,limit+1);
-	for (i = 0 ; i < limit ;i++)
-	{
-		machine->ReadMem(virtAddr+i,1,&oneChar);
-		kernelBuf[i] = (char)oneChar;
-		if (oneChar == 0)
-			break;
-	}
-	return kernelBuf;
+    int i; // index
+    int oneChar;
+    char *kernelBuf = NULL;
+    kernelBuf = new char[limit + 1]; //need for terminal string
+    if (kernelBuf == NULL)
+        return kernelBuf;
+    memset(kernelBuf, 0, limit + 1);
+    for (i = 0; i < limit; i++)
+    {
+        machine->ReadMem(virtAddr + i, 1, &oneChar);
+        kernelBuf[i] = (char)oneChar;
+        if (oneChar == 0)
+            break;
+    }
+    return kernelBuf;
 }
 
 int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
@@ -94,39 +93,44 @@ int SystemToUser(int virtAddress, int lengthBuffer, char *buffer)
     return i;
 }
 
-char* IntToChar(int &sizeBuffer, int number) {
-    char * numberBuffer = new char[MaxIntLength];
-    char * resultBuffer = new char[MaxIntLength];
-    int nSize; 
-    int i=0;
-    int check =0;
-    int count =0;
-    number < 0 ? (check=1,number*=-1,resultBuffer[i]='-',count=1) : 0;
-    while(number>0){
-        numberBuffer[i]=(number%10) + '0';
+char *IntToChar(int &sizeBuffer, int number)
+{
+    char *numberBuffer = new char[MaxIntLength];
+    char *resultBuffer = new char[MaxIntLength];
+    int nSize;
+    int i = 0;
+    int check = 0;
+    int count = 0;
+    number < 0 ? (check = 1, number *= -1, resultBuffer[i] = '-', count = 1) : 0;
+    while (number > 0)
+    {
+        numberBuffer[i] = (number % 10) + '0';
         i++;
-        number/=10;
+        number /= 10;
     }
-    nSize=i;
-    for(int j=nSize-1;j>=0;j--){
-        resultBuffer[count]=numberBuffer[j];
+    nSize = i;
+    for (int j = nSize - 1; j >= 0; j--)
+    {
+        resultBuffer[count] = numberBuffer[j];
         count++;
     }
-    resultBuffer[count]='\0';
-    sizeBuffer=count+1;
+    resultBuffer[count] = '\0';
+    sizeBuffer = count + 1;
 
     delete[] numberBuffer;
     return resultBuffer;
 }
 
-void _Sub() {
-    int op1  = machine->ReadRegister(4);
-    int op2  = machine->ReadRegister(5);
-    int res = op1-op2;
-    machine->WriteRegister(2,res);
+void _Sub()
+{
+    int op1 = machine->ReadRegister(4);
+    int op2 = machine->ReadRegister(5);
+    int res = op1 - op2;
+    machine->WriteRegister(2, res);
 }
 
-void _CreateFile() {
+void _CreateFile()
+{
     int virtAddress;
     char *filename;
     filename = new char[MaxFileLength];
@@ -146,90 +150,105 @@ void _CreateFile() {
     }
     machine->WriteRegister(2, 0);
     delete[] filename;
-
 }
 
-void _ReadInt() {
-    int number =0;
-    int nSize =0;
+void _ReadInt()
+{
+    int number = 0;
+    int nSize = 0;
     int i;
     char *buffer = new char[MaxIntLength];
     nSize = synchConsole->Read(buffer, MaxIntLength);
-    i = (buffer[0]=='-') ? 1 : 0;
-    for(;i<nSize;i++){
-        number*=10;
-        number+=buffer[i]-48;
+    i = (buffer[0] == '-') ? 1 : 0;
+    for (; i < nSize; i++)
+    {
+        number *= 10;
+        number += buffer[i] - 48;
     }
-    number = (buffer[0]=='-') ? -1*number : number;
+    number = (buffer[0] == '-') ? -1 * number : number;
     machine->WriteRegister(2, number);
     delete[] buffer;
 }
 
-void _PrintInt() {
+void _PrintInt()
+{
     int number;
-    number= machine->ReadRegister(4);
+    number = machine->ReadRegister(4);
     int nSize;
-    char * numberBuffer = new char[MaxIntLength];
+    char *numberBuffer = new char[MaxIntLength];
     numberBuffer = IntToChar(nSize, number);
     synchConsole->Write(numberBuffer, nSize);
     delete[] numberBuffer;
 }
 
-void _ReadChar() {
+void _ReadChar()
+{
     int size;
-    char * buffer = new char [MaxIntLength];
+    char *buffer = new char[MaxIntLength];
     size = synchConsole->Read(buffer, MaxIntLength);
     int nBuffer = buffer[0];
     delete[] buffer;
     machine->WriteRegister(2, nBuffer);
 }
 
-void _PrintChar(){
+void _PrintChar()
+{
     char cBuffer;
     int nBuffer = machine->ReadRegister(4);
-    cBuffer = (char) nBuffer;
+    cBuffer = (char)nBuffer;
     synchConsole->Write(&cBuffer, 1);
 }
 
-void _ReadString(){
-    char* buffer = new char[MaxStringLength];
-    int length = synchConsole->Read(buffer,MaxStringLength);
+void _ReadString()
+{
+    char *buffer = new char[MaxStringLength];
+    int length = synchConsole->Read(buffer, MaxStringLength);
     int vAdrr = machine->ReadRegister(4);
-    int check = SystemToUser(vAdrr,length,buffer);
-    delete [] buffer;
+    int check = SystemToUser(vAdrr, length, buffer);
+    delete[] buffer;
 }
 
-void _PrintString(){
+void _PrintString()
+{
     int vAdrr = machine->ReadRegister(4);
-    char* buffer;
-    buffer = UserToSystem(vAdrr,256);
+    char *buffer;
+    buffer = UserToSystem(vAdrr, 256);
     int i = 0;
     while (buffer[i] != '\0')
         i++;
-    buffer[i]='\n';
-    synchConsole->Write(buffer,i+1);
+    buffer[i] = '\n';
+    synchConsole->Write(buffer, i + 1);
     machine->WriteRegister(2, 0);
 }
 
-void _OpenFile(){
-    char * filename new char[MaxStringLength];
+void _OpenFile()
+{
+    char *filename = new char[MaxStringLength];
     int bufferAdd = machine->ReadRegister(4);
     int type = machine->ReadRegister(5);
-    filename = UserToSystem(bufferAdd, MaxFileLength+1);
-    if(fileSystem->getIndex()>10){
-        machine->WriteRegister(2,-1);
-    }else{
-        if(strcmp(filename,"stdin")==0){
-            machine->WriteRegister(2,0);
+    filename = UserToSystem(bufferAdd, MaxFileLength + 1);
+    if (fileSystem->getIndex() > 10)
+    {
+        machine->WriteRegister(2, -1);
+    }
+    else
+    {
+        if (strcmp(filename, "stdin") == 0)
+        {
+            machine->WriteRegister(2, 0);
         }
-        if(strcmp(filename,"stdout")==0){
-            machine->WriteRegister(2,1);
+        if (strcmp(filename, "stdout") == 0)
+        {
+            machine->WriteRegister(2, 1);
         }
-        fileSystem->file[fileSystem->getIndex()]= fileSystem->Open(filename,type);
-        if(fileSystem!=NULL){
-            machine->WriteRegister(2,fileSystem->getIndex()-1);
-        }else{
-            machine->WriteRegister(2,-1);
+        fileSystem->file[fileSystem->getIndex()] = fileSystem->Open(filename, type);
+        if (fileSystem != NULL)
+        {
+            machine->WriteRegister(2, fileSystem->getIndex() - 1);
+        }
+        else
+        {
+            machine->WriteRegister(2, -1);
         }
     }
     delete[] buf;
@@ -256,7 +275,7 @@ void ExceptionHandler(ExceptionType which)
             _Sub();
             break;
         }
-            case SC_Create:
+        case SC_Create:
         {
             _CreateFile();
             break;
@@ -281,15 +300,15 @@ void ExceptionHandler(ExceptionType which)
             _PrintChar();
             break;
         }
-		case SC_ReadString:
+        case SC_ReadString:
         {
             _ReadString();
-        break;
+            break;
         }
-		case SC_PrintString:
+        case SC_PrintString:
         {
             _PrintString();
-		break;
+            break;
         }
         case SC_Open:
         {
@@ -312,15 +331,15 @@ void ExceptionHandler(ExceptionType which)
                "read-only"
                " %d %d \n",
                which, type);
-        ASSERT(FALSE);               
+        ASSERT(FALSE);
         break;
     case BusErrorException:
         printf("Translation resulted in an \n invalid physical address %d %d \n", which, type);
-        ASSERT(FALSE);        
+        ASSERT(FALSE);
         break;
     case AddressErrorException:
         printf("Unaligned reference or one that\n was beyond the end of the \naddress space %d %d \n", which, type);
-        ASSERT(FALSE);       
+        ASSERT(FALSE);
         break;
     case OverflowException:
         printf("nteger overflow in add or sub %d %d \n", which, type);
@@ -330,7 +349,7 @@ void ExceptionHandler(ExceptionType which)
         printf("Unimplemented or reserved instr %d %d \n", which, type);
         ASSERT(FALSE);
         break;
-	case NoException:
+    case NoException:
         break;
     }
 }
