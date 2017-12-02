@@ -113,7 +113,7 @@ void Write(char *buffer, int size, OpenFileId id);
 int Read(char *buffer, int size, OpenFileId id);
 
 /* Close the file, we're done reading and writing to it. */
-int Close(OpenFileId id);
+void Close(OpenFileId id);
 
 
 
@@ -145,7 +145,7 @@ char ReadString(char *buffer,int size);
 
 void PrintString(char * buffer);
 
-
+int CloseFile(OpenFileId id);
 
 #endif /* IN_ASM */
 
