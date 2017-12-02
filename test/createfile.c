@@ -12,9 +12,7 @@ main(){
         PrintString("Error when create file");
     }else{
         PrintString("Create file succesfull");
-        if(Open(filename,0)==1){
-
-        }
+	PrintInt(Open(filename,1));
     }
     return 0;
 }
