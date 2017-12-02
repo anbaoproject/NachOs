@@ -227,6 +227,7 @@ void _OpenFile()
     int bufferAdd = machine->ReadRegister(4);
     int type = machine->ReadRegister(5);
     filename = UserToSystem(bufferAdd, MaxFileLength + 1);
+    printf("debug %d", fileSystem->getIndex());
     if (fileSystem->getIndex() > 10)
     {
         machine->WriteRegister(2, -1);
@@ -242,6 +243,7 @@ void _OpenFile()
             machine->WriteRegister(2, 1);
         }
         fileSystem->file[fileSystem->getIndex()] = fileSystem->Open(filename, type);
+        printf("debug %d", fileSystem->getIndex());
         if (fileSystem != NULL)
         {
             machine->WriteRegister(2, fileSystem->getIndex() - 1);
