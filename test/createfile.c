@@ -5,6 +5,7 @@
 int 
 main(){
     OpenFileId id;
+    int res;
     char *filename[maxlen+1];
     PrintString("Input file's name:");
     ReadString(filename,maxlen);
@@ -14,7 +15,8 @@ main(){
         PrintString("Create file succesfull");
  	id=Open(filename,1);
 	PrintInt(id);
-	PrintInt(Close(id));
+	res=CloseFile(id);
+        PrintInt(res);
     }
     return 0;
 }
