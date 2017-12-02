@@ -371,17 +371,15 @@ void _WriteFile()
 void _Seek()
 {
     int pos = machine->ReadRegister(4);
-    int OpenFileID = machine->ReadRegister(5);
+    int id = machine->ReadRegister(5);
     if (id < 0 || id > 10)
     {
         machine->WriteRegister(2, -1);
-        delete[] buffer;
         return;
     }
     if (fileSystem->file[id] == NULL)
     {
         machine->WriteRegister(2, -1);
-        delete[] buffer;
         return;
     }
     pos == -1 ? pos = fileSystem->file[id]->Length() : pos;
