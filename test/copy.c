@@ -5,10 +5,10 @@
 //Chuong trinh cho phep nguoi dung nhap vao ten file nguon va ten file dich sau do copy file nguon vao file dich
 
 int main ()
-{
-	
+{	
 	char source[MaxFileName], destination[MaxFileName], buffer[MaxBuffer];
-	int FileID1, FileID2, size = 0, pos = 0, i = 0;
+	int  size = 0, pos = 0, i = 0;
+	OpenFileId FileID1, FileID2;
 
 	PrintString("Nhap vao ten file nguon: ");
 	ReadString(source,MaxFileName);
@@ -27,6 +27,7 @@ int main ()
 	
 	if (FileID2 == -1)
 	{
+		PrintString("Tao file moi");
 		CreateFile(destination);
 		FileID2 = Open(destination,0); // Mo file dich de ghi
 	}
@@ -52,6 +53,7 @@ int main ()
 		
 		// Di chuyen con tro toi vi tri tiep theo can ghi
 		Seek(pos, FileID2);
+
 		Write(buffer,MaxBuffer,FileID2); 
 
 		// Vi tri con tro tiep theo

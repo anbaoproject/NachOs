@@ -227,6 +227,7 @@ void _OpenFile()
     char *filename = new char[MaxStringLength];
     int bufferAdd = machine->ReadRegister(4);
     int type = machine->ReadRegister(5);
+    int index;
     filename = UserToSystem(bufferAdd, MaxFileLength + 1);
     if (fileSystem->getIndex() > 10)
     {
@@ -246,8 +247,10 @@ void _OpenFile()
 	    delete[] filename;
             return;
         }
-        fileSystem->file[fileSystem->getIndex()] = fileSystem->Open(filename, type);
-        if (fileSystem != NULL)
+	index =fileSystem->getIndex();
+        fileSystem->file[index] = fileSystem->Open(filename, type);
+
+        if (fileSystem->file[index] != NULL)
         {
             machine->WriteRegister(2, fileSystem->getIndex() - 1);
         }
