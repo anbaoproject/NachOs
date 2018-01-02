@@ -28,8 +28,12 @@ SynchDisk   *synchDisk;
 #endif
 
 #ifdef USER_PROGRAM	// requires either FILESYS or FILESYS_STUB
-Machine *machine;	// user program memory and registers
+Machine *   machine;	// user program memory and registers
 SynchConsole *synchConsole;
+BitMap *gPhysPageBitMap;
+Semaphore * addrLock;
+sTable * sTab;
+pTable * pTab;
 #endif
 
 #ifdef NETWORK
@@ -39,7 +43,7 @@ PostOffice *postOffice;
 
 // External definition, to allow us to take a pointer to this function
 extern void Cleanup();
-
+//
 
 //----------------------------------------------------------------------
 // TimerInterruptHandler
@@ -151,6 +155,11 @@ Initialize(int argc, char **argv)
 #ifdef USER_PROGRAM
     machine = new Machine(debugUserProg);	// this must come first
     synchConsole = new SynchConsole();
+    gPhysPageBitMap = new BitMap(NumPhysPages);
+    addrLock = new Semaphore("addrLock",1);
+    sTab = new sTable();
+    pTab = new pTable();
+
 #endif
 
 #ifdef FILESYS
@@ -164,6 +173,7 @@ Initialize(int argc, char **argv)
 #ifdef NETWORK
     postOffice = new PostOffice(netname, rely, 10);
 #endif
+
 }
 
 //----------------------------------------------------------------------

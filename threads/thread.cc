@@ -31,6 +31,11 @@
 //
 //	"threadName" is an arbitrary string, useful for debugging.
 //----------------------------------------------------------------------
+Thread::FreeSpace(){
+    if(space!=0){
+        delete space;
+    }
+}
 
 Thread::Thread(char* threadName)
 {

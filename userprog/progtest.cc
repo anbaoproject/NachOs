@@ -21,6 +21,11 @@
 //----------------------------------------------------------------------
 
 void
+StartProcessByID(int id){
+ 
+}
+
+void
 StartProcess(char *filename)
 {
     OpenFile *executable = fileSystem->Open(filename);
