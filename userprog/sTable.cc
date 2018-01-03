@@ -32,15 +32,6 @@ Semaphore * Sem::getSem(){
     return this->sem;
 }
 
-sTable::sTable()
-{
-    bm = new BitMap(10);
-    for (int i = 0; i < MAX_SEMAPHORE; i++)
-    {
-        semTab[i] = NULL;
-    }
-}
-
 sTable::~sTable()
 {
     delete bm;
