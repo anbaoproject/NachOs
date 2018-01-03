@@ -3,7 +3,6 @@
 
 #include "thread.h"
 #include "synch.h"
-#include "Sem.h"
 #include "bitmap.h"
 
 #define MAX_SEMAPHORE 10
