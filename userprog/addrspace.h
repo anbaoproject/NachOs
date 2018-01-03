@@ -18,8 +18,26 @@
 
 #define UserStackSize		1024 	// increase this as necessary!
 
+#define NumFileTable 10
+#define MaxLenghtName 32
+
+extern Machine* machine;
+class FileTable 
+{
+ friend class Thread;
+//friend class AddrSpace;
+public:
+	FileTable();
+	~FileTable();
+
+	OpenFile* FileTableOpen[NumFileTable];
+	char* FileName[MaxLenghtName];
+};
+
+
 class AddrSpace {
   public:
+  	AddrSpace(char* filename);
     AddrSpace(OpenFile *executable);	// Create an address space,
 					// initializing it with the program
 					// stored in the file "executable"

@@ -64,7 +64,6 @@ AddrSpace::AddrSpace(OpenFile *executable)
 {
     NoffHeader noffH;
     unsigned int i, size;
-    addrLock->P();
     executable->ReadAt((char *)&noffH, sizeof(noffH), 0);
     if ((noffH.noffMagic != NOFFMAGIC) &&
         (WordToHost(noffH.noffMagic) == NOFFMAGIC))
@@ -97,7 +96,6 @@ AddrSpace::AddrSpace(OpenFile *executable)
         pageTable[i].readOnly = FALSE; // if the code segment was entirely on
                                        // a separate page, we could set its
                                        // pages to be read-only
-        bzero(&machine->mainMemory[pageTable[i].physicalPage*PageSize],PageSize);
     }
 
     // zero out the entire address space, to zero the unitialized data segment
@@ -119,55 +117,121 @@ AddrSpace::AddrSpace(OpenFile *executable)
     //     executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
     //                        noffH.initData.size, noffH.initData.inFileAddr);
     // }
-    int inFileAddr,firstPage, firstPageSize, lastPage, lastPageSize, temppageSize;
-    if (noffH.code.size>0){
-        inFileAddr = noffH.code.inFileAddr;
-        firstPage = noffH.code.virtualAddr / PageSize;
-        temppageSize = PageSize - noffH.code.virtualAddr % PageSize;
-        if(temppageSize < noffH.code.size){
-            firstPageSize = temppageSize;
-            lastPage = (noffH.code.virtualAddr+ noffH.code.size) / PageSize;
-            lastPageSize = (noffH.code.virtualAddr + noffH.code.size) % PageSize;
-        } else {
-            firstPageSize = noffH.code.size;
-            lastPage = firstPage+1;
-            lastPageSize = 0;
-        }
-        executable->ReadAt(&(machine->mainMemory[pageTable[firstPage].physicalPage*PageSize+PageSize -temppageSize]), firstPageSize, inFileAddr);
-        if(lastPageSize != 0 ){
-            executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage*PageSize]),PageSize.inF)
-        }
-
-        for(i=firstPage+1;i<lastPage;i++){
-            executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage*PageSize]),PageSize,inFileAddr+firstPageSize+(i-firstPage-1)*PageSize);
-        }
-   }
-
-    if (noffH.initData.size > 0) {
-        inFileAddr = noffH.initData.inFileAddr;
-        firstPage = noffH.initData.virtualAddr/PageSize;
-        temppageSize = PageSize - noffH.initData.virtualAddr % PageSize;
-        if(temppageSize < noffH.initData.size){
-            firstPageSize = temppageSize;
-            lastPage = (noffH.initData.virtualAddr + noffH.initData.size ) / PageSize;
-            lastPageSize = (noffH.initData.virtualAddr + noffH.initData.size) % PageSize;
-        } else{
-            firstPageSize = noffH.initData.size;
-            lastPage = firstPage + 1;
-            lastPageSize = 0;
-        }
-        executable->ReadAt(&(machine->mainMemory[pageTable[firstPage].physicalPage*PageSize+PageSize -temppageSize]), firstPageSize, inFileAddr);
-   
-        if(lastPageSize != 0){
-            executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage*PageSize]),lastPageSize, inFileAddr+firstPageSize+(lastPage-firstPage-1)*PageSize);
-        }
-
-        for(i=firstPage+1; i < lastPage;i++){
-            executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage*PageSize]),PageSize,inFileAddr+firstPageSize+(i-firstPageSize-1)*PageSize);
-        }
+    bzero(machine->mainMemory, size);
+    if (noffH.code.size > 0) {
+        DEBUG('a', "Initializing code segment, at 0x%x, size %d\n", 
+			noffH.code.virtualAddr, noffH.code.size);
+        executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]),
+			noffH.code.size, noffH.code.inFileAddr);
     }
+    if (noffH.initData.size > 0) {
+        DEBUG('a', "Initializing data segment, at 0x%x, size %d\n", 
+			noffH.initData.virtualAddr, noffH.initData.size);
+        executable->ReadAt(&(machine->mainMemory[noffH.initData.virtualAddr]),
+			noffH.initData.size, noffH.initData.inFileAddr);
+    }
+}
 
-    addrLock->V();
+AddrSpace::AddrSpace(char* filename)
+{
+//	int temp;
+   	 openfiletab = new FileTable();
+	NoffHeader noffH; 
+	unsigned int i, size, j; 
+	unsigned int numCodePage, numDataPage; 
+	int lastCodePageSize, lastDataPageSize, firstDataPageSize,tempDataSize; // kích 
+	
+	OpenFile* executable = fileSystem->Open(filename); 
+	if (executable == NULL)
+	{ 
+		printf("\nAddrspace::Error opening file: %s",filename); 
+		return; 
+	} 
+	
+	executable->ReadAt((char *)&noffH, sizeof(noffH), 0); 
+	if ((noffH.noffMagic != NOFFMAGIC) && (WordToHost(noffH.noffMagic) == NOFFMAGIC)) 
+		SwapHeader(&noffH); 
+	ASSERT(noffH.noffMagic == NOFFMAGIC); 
+	addrLock->P();
+	// how big is address space? 
+	size = noffH.code.size + noffH.initData.size + noffH.uninitData.size + UserStackSize;  // we need to increase the size  // to leave room for the stack 
+	numPages = divRoundUp(size, PageSize); 
+	size = numPages * PageSize; 
+	// Check the available memory enough to load new process 
+	//debug 
+
+	if (numPages > gPhysPageBitMap->NumClear() )
+	{ 
+		printf("\nAddrSpace:Load: notenough memory for new process..!"); 
+		numPages = 0; 
+		delete executable; 
+		addrLock->V(); 
+		return ; 
+	} 
+	// first, set up the translation 
+	pageTable = new TranslationEntry[numPages]; 
+	for (i = 0; i < numPages; i++)
+	{ 
+		pageTable[i].virtualPage = i; // for now, virtual page # = phys page # 
+		pageTable[i].physicalPage = gPhysPageBitMap->Find();
+		pageTable[i].valid = TRUE; 
+		pageTable[i].use = FALSE; 
+		pageTable[i].dirty = FALSE; 
+		pageTable[i].readOnly = FALSE;// if the code segment was entirely on 
+		// a separate page, we could set its 
+		// pages to be read-only 
+		
+		bzero(&(machine->mainMemory[pageTable[i].physicalPage*PageSize]), PageSize); 
+		//printf("phyPage %d \n",pageTable[i].physicalPage); 
+	} 
+	addrLock->V();
+	// Calculate numCodePage and numDataPage 
+	numCodePage = divRoundUp(noffH.code.size, PageSize); 
+	// Calculate lastCodePageSize 
+	lastCodePageSize = noffH.code.size - (numCodePage-1)*PageSize; 
+	tempDataSize = noffH.initData.size - (PageSize - lastCodePageSize); 
+	if (tempDataSize < 0)
+	{ 
+		numDataPage = 0;   firstDataPageSize = noffH.initData.size; 
+ 	} 
+	else
+	{ 
+		 numDataPage = divRoundUp(tempDataSize, PageSize); 
+		 lastDataPageSize = tempDataSize - (numDataPage-1)*PageSize; 
+		 firstDataPageSize = PageSize - lastCodePageSize; 
+	} 
+//	 Copy the Code segment into memory 
+if(noffH.code.size > 0) 
+{ 
+	for (i = 0; i < numCodePage; i++) 
+	{  
+	    executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr]) + 
+		pageTable[i].physicalPage*PageSize, i<(numCodePage-1)?PageSize:lastCodePageSize, noffH.code.inFileAddr + i*PageSize); 
+	} 
+}
+	//Check whether last page of code segment is full and copy the first part of 
+	//initData segment into this page 
+
+	 if (lastCodePageSize < PageSize)
+	{   // Copy initData into the remain part of lastCodePage 
+		 if (firstDataPageSize > 0) 
+		 executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr])+(pageTable[i-1].physicalPage*PageSize + lastCodePageSize), firstDataPageSize, noffH.initData.inFileAddr); 
+	} 
+	// Copy the remain of initData segment into memory 
+if(noffH.initData.size > 0) 
+{
+	for (j = 0; j< numDataPage; j++)
+	 { 
+		// 
+		 executable->ReadAt(&(machine->mainMemory[noffH.code.virtualAddr])+pageTable[i].physicalPage*PageSize, 
+		j<(numDataPage-1)?PageSize:lastDataPageSize, 
+		noffH.initData.inFileAddr + j*PageSize + firstDataPageSize); 
+		i++; 
+	} 
+}
+	delete executable; 
+	return ;
+
 }
 
 //----------------------------------------------------------------------
