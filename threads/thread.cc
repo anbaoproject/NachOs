@@ -31,6 +31,7 @@
 //
 //	"threadName" is an arbitrary string, useful for debugging.
 //----------------------------------------------------------------------
+void
 Thread::FreeSpace(){
     if(space!=0){
         delete space;
