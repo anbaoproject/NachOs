@@ -42,7 +42,10 @@ main.o: ../threads/main.cc ../threads/copyright.h ../threads/utility.h \
  ../machine/disk.h ../userprog/addrspace.h ../filesys/filesys.h \
  ../filesys/openfile.h ../threads/scheduler.h ../threads/list.h \
  ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
- ../machine/timer.h ../threads/synchcons.h ../machine/console.h
+ ../machine/timer.h ../threads/synchcons.h ../machine/console.h \
+ ../userprog/ptable.h ../userprog/bitmap.h ../filesys/openfile.h \
+ ../userprog/pcb.h ../threads/thread.h ../threads/synch.h \
+ ../userprog/sTable.h ../userprog/bitmap.h
 list.o: ../threads/list.cc ../threads/copyright.h ../threads/list.h \
  ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \
  ../threads/copyright.h /usr/include/stdio.h /usr/include/features.h \
@@ -70,7 +73,9 @@ scheduler.o: ../threads/scheduler.cc ../threads/copyright.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
  ../threads/system.h ../machine/interrupt.h ../threads/list.h \
  ../machine/stats.h ../machine/timer.h ../threads/synchcons.h \
- ../machine/console.h
+ ../machine/console.h ../userprog/ptable.h ../userprog/bitmap.h \
+ ../filesys/openfile.h ../userprog/pcb.h ../threads/thread.h \
+ ../threads/synch.h ../userprog/sTable.h ../userprog/bitmap.h
 synch.o: ../threads/synch.cc ../threads/copyright.h ../threads/synch.h \
  ../threads/thread.h ../threads/utility.h ../threads/bool.h \
  ../machine/sysdep.h ../threads/copyright.h /usr/include/stdio.h \
@@ -87,7 +92,10 @@ synch.o: ../threads/synch.cc ../threads/copyright.h ../threads/synch.h \
  ../filesys/filesys.h ../filesys/openfile.h ../threads/list.h \
  ../threads/system.h ../threads/scheduler.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
- ../threads/synchcons.h ../machine/console.h
+ ../threads/synchcons.h ../machine/console.h ../userprog/ptable.h \
+ ../userprog/bitmap.h ../filesys/openfile.h ../userprog/pcb.h \
+ ../threads/thread.h ../threads/synch.h ../userprog/sTable.h \
+ ../userprog/bitmap.h
 synchlist.o: ../threads/synchlist.cc ../threads/copyright.h \
  ../threads/synchlist.h ../threads/list.h ../threads/utility.h \
  ../threads/bool.h ../machine/sysdep.h ../threads/copyright.h \
@@ -118,7 +126,10 @@ system.o: ../threads/system.cc ../threads/copyright.h ../threads/system.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
  ../threads/scheduler.h ../threads/list.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
- ../threads/synchcons.h ../machine/console.h
+ ../threads/synchcons.h ../machine/console.h ../userprog/ptable.h \
+ ../userprog/bitmap.h ../filesys/openfile.h ../userprog/pcb.h \
+ ../threads/thread.h ../threads/synch.h ../userprog/sTable.h \
+ ../userprog/bitmap.h
 thread.o: ../threads/thread.cc ../threads/copyright.h ../threads/thread.h \
  ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \
  ../threads/copyright.h /usr/include/stdio.h /usr/include/features.h \
@@ -135,7 +146,9 @@ thread.o: ../threads/thread.cc ../threads/copyright.h ../threads/thread.h \
  ../threads/synch.h ../threads/list.h ../threads/system.h \
  ../threads/scheduler.h ../machine/interrupt.h ../threads/list.h \
  ../machine/stats.h ../machine/timer.h ../threads/synchcons.h \
- ../machine/console.h
+ ../machine/console.h ../userprog/ptable.h ../userprog/bitmap.h \
+ ../filesys/openfile.h ../userprog/pcb.h ../threads/thread.h \
+ ../threads/synch.h ../userprog/sTable.h ../userprog/bitmap.h
 utility.o: ../threads/utility.cc ../threads/copyright.h \
  ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \
  ../threads/copyright.h /usr/include/stdio.h /usr/include/features.h \
@@ -163,7 +176,10 @@ threadtest.o: ../threads/threadtest.cc ../threads/copyright.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
  ../threads/scheduler.h ../threads/list.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
- ../threads/synchcons.h ../machine/console.h
+ ../threads/synchcons.h ../machine/console.h ../userprog/ptable.h \
+ ../userprog/bitmap.h ../filesys/openfile.h ../userprog/pcb.h \
+ ../threads/thread.h ../threads/synch.h ../userprog/sTable.h \
+ ../userprog/bitmap.h
 interrupt.o: ../machine/interrupt.cc ../threads/copyright.h \
  ../machine/interrupt.h ../threads/list.h ../threads/copyright.h \
  ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \
@@ -180,7 +196,10 @@ interrupt.o: ../machine/interrupt.cc ../threads/copyright.h \
  ../machine/disk.h ../userprog/addrspace.h ../filesys/filesys.h \
  ../filesys/openfile.h ../threads/scheduler.h ../threads/list.h \
  ../machine/interrupt.h ../machine/stats.h ../machine/timer.h \
- ../threads/synchcons.h ../machine/console.h
+ ../threads/synchcons.h ../machine/console.h ../userprog/ptable.h \
+ ../userprog/bitmap.h ../filesys/openfile.h ../userprog/pcb.h \
+ ../threads/thread.h ../threads/synch.h ../userprog/sTable.h \
+ ../userprog/bitmap.h
 sysdep.o: ../machine/sysdep.cc ../threads/copyright.h \
  /usr/include/stdio.h /usr/include/features.h /usr/include/sys/cdefs.h \
  /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
@@ -224,7 +243,9 @@ sysdep.o: ../machine/sysdep.cc ../threads/copyright.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
  ../threads/scheduler.h ../threads/list.h ../machine/interrupt.h \
  ../machine/stats.h ../machine/timer.h ../threads/synchcons.h \
- ../machine/console.h
+ ../machine/console.h ../userprog/ptable.h ../userprog/bitmap.h \
+ ../filesys/openfile.h ../userprog/pcb.h ../threads/thread.h \
+ ../threads/synch.h ../userprog/sTable.h ../userprog/bitmap.h
 stats.o: ../machine/stats.cc ../threads/copyright.h ../threads/utility.h \
  ../threads/copyright.h ../threads/bool.h ../machine/sysdep.h \
  /usr/include/stdio.h /usr/include/features.h /usr/include/sys/cdefs.h \
@@ -251,7 +272,10 @@ timer.o: ../machine/timer.cc ../threads/copyright.h ../machine/timer.h \
  ../machine/disk.h ../userprog/addrspace.h ../filesys/filesys.h \
  ../filesys/openfile.h ../threads/scheduler.h ../threads/list.h \
  ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
- ../machine/timer.h ../threads/synchcons.h ../machine/console.h
+ ../machine/timer.h ../threads/synchcons.h ../machine/console.h \
+ ../userprog/ptable.h ../userprog/bitmap.h ../filesys/openfile.h \
+ ../userprog/pcb.h ../threads/thread.h ../threads/synch.h \
+ ../userprog/sTable.h ../userprog/bitmap.h
 addrspace.o: ../userprog/addrspace.cc ../threads/copyright.h \
  ../threads/system.h ../threads/copyright.h ../threads/utility.h \
  ../threads/bool.h ../machine/sysdep.h /usr/include/stdio.h \
@@ -268,8 +292,10 @@ addrspace.o: ../userprog/addrspace.cc ../threads/copyright.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
  ../threads/scheduler.h ../threads/list.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
- ../threads/synchcons.h ../machine/console.h ../userprog/addrspace.h \
- ../bin/noff.h
+ ../threads/synchcons.h ../machine/console.h ../userprog/ptable.h \
+ ../userprog/bitmap.h ../filesys/openfile.h ../userprog/pcb.h \
+ ../threads/thread.h ../threads/synch.h ../userprog/sTable.h \
+ ../userprog/bitmap.h ../userprog/addrspace.h ../bin/noff.h
 bitmap.o: ../userprog/bitmap.cc ../threads/copyright.h \
  ../userprog/bitmap.h ../threads/utility.h ../threads/copyright.h \
  ../threads/bool.h ../machine/sysdep.h /usr/include/stdio.h \
@@ -298,7 +324,18 @@ exception.o: ../userprog/exception.cc ../threads/copyright.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
  ../threads/scheduler.h ../threads/list.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
- ../threads/synchcons.h ../machine/console.h ../userprog/syscall.h
+ ../threads/synchcons.h ../machine/console.h ../userprog/ptable.h \
+ ../userprog/bitmap.h ../filesys/openfile.h ../userprog/pcb.h \
+ ../threads/thread.h ../threads/synch.h ../userprog/sTable.h \
+ ../userprog/bitmap.h ../userprog/syscall.h \
+ /usr/lib/gcc/i686-redhat-linux/4.4.7/../../../../include/c++/4.4.7/exception \
+ /usr/lib/gcc/i686-redhat-linux/4.4.7/../../../../include/c++/4.4.7/i686-redhat-linux/bits/c++config.h \
+ /usr/lib/gcc/i686-redhat-linux/4.4.7/../../../../include/c++/4.4.7/i686-redhat-linux/bits/os_defines.h \
+ /usr/lib/gcc/i686-redhat-linux/4.4.7/../../../../include/c++/4.4.7/i686-redhat-linux/bits/cpu_defines.h \
+ /usr/include/math.h /usr/include/bits/huge_val.h \
+ /usr/include/bits/huge_valf.h /usr/include/bits/huge_vall.h \
+ /usr/include/bits/inf.h /usr/include/bits/nan.h \
+ /usr/include/bits/mathdef.h /usr/include/bits/mathcalls.h
 progtest.o: ../userprog/progtest.cc ../threads/copyright.h \
  ../threads/system.h ../threads/copyright.h ../threads/utility.h \
  ../threads/bool.h ../machine/sysdep.h /usr/include/stdio.h \
@@ -315,8 +352,10 @@ progtest.o: ../userprog/progtest.cc ../threads/copyright.h \
  ../userprog/addrspace.h ../filesys/filesys.h ../filesys/openfile.h \
  ../threads/scheduler.h ../threads/list.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
- ../threads/synchcons.h ../machine/console.h ../userprog/addrspace.h \
- ../threads/synch.h
+ ../threads/synchcons.h ../machine/console.h ../userprog/ptable.h \
+ ../userprog/bitmap.h ../filesys/openfile.h ../userprog/pcb.h \
+ ../threads/thread.h ../threads/synch.h ../userprog/sTable.h \
+ ../userprog/bitmap.h ../userprog/addrspace.h
 console.o: ../machine/console.cc ../threads/copyright.h \
  ../machine/console.h ../threads/utility.h ../threads/copyright.h \
  ../threads/bool.h ../machine/sysdep.h /usr/include/stdio.h \
@@ -333,7 +372,10 @@ console.o: ../machine/console.cc ../threads/copyright.h \
  ../machine/disk.h ../userprog/addrspace.h ../filesys/filesys.h \
  ../filesys/openfile.h ../threads/scheduler.h ../threads/list.h \
  ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
- ../machine/timer.h ../threads/synchcons.h ../machine/console.h
+ ../machine/timer.h ../threads/synchcons.h ../machine/console.h \
+ ../userprog/ptable.h ../userprog/bitmap.h ../filesys/openfile.h \
+ ../userprog/pcb.h ../threads/thread.h ../threads/synch.h \
+ ../userprog/sTable.h ../userprog/bitmap.h
 machine.o: ../machine/machine.cc ../threads/copyright.h \
  ../machine/machine.h ../threads/utility.h ../threads/copyright.h \
  ../threads/bool.h ../machine/sysdep.h /usr/include/stdio.h \
@@ -350,7 +392,10 @@ machine.o: ../machine/machine.cc ../threads/copyright.h \
  ../machine/machine.h ../userprog/addrspace.h ../filesys/filesys.h \
  ../filesys/openfile.h ../threads/scheduler.h ../threads/list.h \
  ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
- ../machine/timer.h ../threads/synchcons.h ../machine/console.h
+ ../machine/timer.h ../threads/synchcons.h ../machine/console.h \
+ ../userprog/ptable.h ../userprog/bitmap.h ../filesys/openfile.h \
+ ../userprog/pcb.h ../threads/thread.h ../threads/synch.h \
+ ../userprog/sTable.h ../userprog/bitmap.h
 mipssim.o: ../machine/mipssim.cc ../threads/copyright.h \
  ../machine/machine.h ../threads/utility.h ../threads/copyright.h \
  ../threads/bool.h ../machine/sysdep.h /usr/include/stdio.h \
@@ -368,7 +413,9 @@ mipssim.o: ../machine/mipssim.cc ../threads/copyright.h \
  ../filesys/filesys.h ../filesys/openfile.h ../threads/scheduler.h \
  ../threads/list.h ../machine/interrupt.h ../threads/list.h \
  ../machine/stats.h ../machine/timer.h ../threads/synchcons.h \
- ../machine/console.h
+ ../machine/console.h ../userprog/ptable.h ../userprog/bitmap.h \
+ ../filesys/openfile.h ../userprog/pcb.h ../threads/thread.h \
+ ../threads/synch.h ../userprog/sTable.h ../userprog/bitmap.h
 translate.o: ../machine/translate.cc ../threads/copyright.h \
  ../machine/machine.h ../threads/utility.h ../threads/copyright.h \
  ../threads/bool.h ../machine/sysdep.h /usr/include/stdio.h \
@@ -385,7 +432,10 @@ translate.o: ../machine/translate.cc ../threads/copyright.h \
  ../threads/system.h ../threads/utility.h ../threads/thread.h \
  ../machine/machine.h ../threads/scheduler.h ../threads/list.h \
  ../machine/interrupt.h ../threads/list.h ../machine/stats.h \
- ../machine/timer.h ../threads/synchcons.h ../machine/console.h
+ ../machine/timer.h ../threads/synchcons.h ../machine/console.h \
+ ../userprog/ptable.h ../userprog/bitmap.h ../filesys/openfile.h \
+ ../userprog/pcb.h ../threads/thread.h ../threads/synch.h \
+ ../userprog/sTable.h ../userprog/bitmap.h
 synchcons.o: ../threads/synchcons.cc ../threads/synchcons.h \
  ../machine/console.h ../threads/copyright.h ../threads/utility.h \
  ../threads/copyright.h ../threads/bool.h ../machine/sysdep.h \
@@ -401,7 +451,7 @@ synchcons.o: ../threads/synchcons.cc ../threads/synchcons.h \
  ../threads/utility.h ../machine/machine.h ../machine/translate.h \
  ../machine/disk.h ../userprog/addrspace.h ../filesys/filesys.h \
  ../filesys/openfile.h ../threads/list.h
- sTable.o: ../userprog/sTable.cc ../userprog/../userprog/sTable.h \
+sTable.o: ../userprog/sTable.cc ../userprog/../userprog/sTable.h \
  ../threads/synch.h ../threads/copyright.h ../threads/thread.h \
  ../threads/utility.h ../threads/bool.h ../machine/sysdep.h \
  ../threads/copyright.h /usr/include/stdio.h /usr/include/features.h \
@@ -433,10 +483,10 @@ pcb.o: ../userprog/pcb.cc ../userprog/pcb.h ../threads/thread.h \
  ../threads/thread.h ../threads/list.h ../threads/system.h \
  ../threads/scheduler.h ../machine/interrupt.h ../threads/list.h \
  ../machine/stats.h ../machine/timer.h ../threads/synchcons.h \
- ../machine/console.h ../userprog/pTable.h ../userprog/bitmap.h \
+ ../machine/console.h ../userprog/ptable.h ../userprog/bitmap.h \
  ../filesys/openfile.h ../userprog/sTable.h ../userprog/bitmap.h \
  ../userprog/addrspace.h
-pTable.o: ../userprog/pTable.cc ../userprog/../userprog/pTable.h \
+ptable.o: ../userprog/ptable.cc ../userprog/../userprog/ptable.h \
  ../userprog/../userprog/bitmap.h ../threads/copyright.h \
  ../threads/utility.h ../threads/copyright.h ../threads/bool.h \
  ../machine/sysdep.h /usr/include/stdio.h /usr/include/features.h \
@@ -454,7 +504,7 @@ pTable.o: ../userprog/pTable.cc ../userprog/../userprog/pTable.h \
  ../threads/synch.h ../threads/thread.h ../threads/list.h \
  ../threads/system.h ../threads/scheduler.h ../machine/interrupt.h \
  ../threads/list.h ../machine/stats.h ../machine/timer.h \
- ../threads/synchcons.h ../machine/console.h ../userprog/pTable.h \
+ ../threads/synchcons.h ../machine/console.h ../userprog/ptable.h \
  ../userprog/sTable.h ../userprog/bitmap.h ../userprog/bitmap.h
 # DEPENDENCIES MUST END AT END OF FILE
 # IF YOU PUT STUFF HERE IT WILL GO AWAY
