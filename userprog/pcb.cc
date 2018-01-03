@@ -13,6 +13,7 @@ PCB::PCB()
     this->exitcode = 0;
     this->numwait = 0;
     this->parentId = -1;
+    this->pid = 0;
 }
 
 PCB::PCB(int id)
@@ -26,6 +27,7 @@ PCB::PCB(int id)
         parentId = currentThread->ProccessID;
     }
 
+    this->pid = id;
     this->numwait = 0;
     this->exitcode = 0;
     this->thread = NULL;

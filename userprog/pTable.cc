@@ -19,7 +19,7 @@ pTable::pTable(int size){
     bm->Mark(0);
 
     pcb[0] = new PCB(0);
-    pcb[0]->SetFileName("./test/scheduler");
+    pcb[0]->SetFileName("./test/shell");
     pcb[0]->parentId = -1;
 }
 
@@ -46,8 +46,13 @@ int pTable::ExecUpdate(char * name){
         bmsem->V();
         return -1;
     }
-
-    if(strcmp(name,"./test/scheduler")==0 || strcmp(name,currentThread->getName())==0 ){
+    OpenFile * file = fileSystem->Open(name);
+    if(file == NULL){
+        printf("\n Cannot open File\n");
+        bmsem->V();
+        return -1;
+    }
+    if(strcmp(name,"./test/shell")==0 || strcmp(name,currentThread->getName())==0 ){
         printf("\n Cannot execute itself \n");
         bmsem->V();
         return -1;
@@ -112,15 +117,15 @@ int pTable::JoinUpdate(int id){
 }
 
 int pTable::GetFreeSlot(){
-    return bm->Find();
+    return this->bm->Find();
 }
 
 bool pTable::isExist(int pid){
-    return bm->Test(pid);
+    return this->bm->Test(pid);
 }
 
 void pTable::Remove(int pid){
-    bm->Clear(pid);
+    this->bm->Clear(pid);
     if(pcb[pid]!=0){
         delete pcb[pid];
     }

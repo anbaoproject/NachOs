@@ -64,7 +64,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
 {
     NoffHeader noffH;
     unsigned int i, size;
-
+    addrLock->P();
     executable->ReadAt((char *)&noffH, sizeof(noffH), 0);
     if ((noffH.noffMagic != NOFFMAGIC) &&
         (WordToHost(noffH.noffMagic) == NOFFMAGIC))
@@ -134,6 +134,13 @@ AddrSpace::AddrSpace(OpenFile *executable)
             lastPageSize = 0;
         }
         executable->ReadAt(&(machine->mainMemory[pageTable[firstPage].physicalPage*PageSize+PageSize -temppageSize]), firstPageSize, inFileAddr);
+        if(lastPageSize != 0 ){
+            executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage*PageSize]),PageSize.inF)
+        }
+
+        for(i=firstPage+1;i<lastPage;i++){
+            executable->ReadAt(&(machine->mainMemory[pageTable[i].physicalPage*PageSize]),PageSize,inFileAddr+firstPageSize+(i-firstPage-1)*PageSize);
+        }
    }
 
     if (noffH.initData.size > 0) {
@@ -160,7 +167,7 @@ AddrSpace::AddrSpace(OpenFile *executable)
         }
     }
 
-    addrLo
+    addrLock->V();
 }
 
 //----------------------------------------------------------------------

@@ -18,6 +18,7 @@ class PCB
 
   public:
     int parentId;
+    int pid;
     PCB();
     PCB(int id);
     ~PCB();

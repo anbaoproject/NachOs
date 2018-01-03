@@ -28,6 +28,7 @@
 #define MaxFileLength 32
 #define MaxIntLength 9
 #define MaxStringLength 256
+#define MaxSemName 50
 //----------------------------------------------------------------------
 // ExceptionHandler
 // 	Entry point into the Nachos kernel.  Called when a user program
@@ -402,6 +403,76 @@ void _Seek()
     }
 }
 
+void _Exec(){
+    int bufferAdd = machine->ReadRegister(4);
+    if(bufferAdd == 0){
+        machine->WriteRegister(2,-1);
+        return;
+    }
+
+    char *filename= new char[MaxStringLength];
+    filename = UserToSystem(bufferAdd,MaxFileLength+1);
+
+    int ret = pTab->ExecUpdate(filename);
+    machine->WriteRegister(2,ret);
+}
+
+void _Join() {
+    int id = machine->ReadRegister(4);
+    int ret = pTab->JoinUpdate(id);
+    machine->WriteRegister(2,ret);
+}
+
+void _Exit() {
+    int exitcode = machine->ReadRegister(4);
+    int ret = pTab->ExitUpdate(exitcode);
+    machine->WriteRegister(2,ret);
+}
+
+void _CreateSemaphore(){
+    int bufferAdd = machine->ReadRegister(4);
+    int semval = machine->ReadRegister(5);
+    if(bufferAdd == 0 || semval <0 ) {
+        machine->WriteRegister(2,-1);
+        return;
+    }
+
+    char * filename = new char[MaxSemName];
+    filename = UserToSystem(bufferAdd,MaxSemName+1);
+    int ret = sTab->Create(filename, semval);
+    machine->WriteRegister(2, ret);
+}
+
+void _Up() {
+    int bufferAdd = machine->ReadRegister(4);
+    int semval = machine->ReadRegister(5);
+    if(bufferAdd == 0 || semval <0 ) {
+        machine->WriteRegister(2,-1);
+        return;
+    }
+
+    char * filename = new char[MaxSemName];
+    filename = UserToSystem(bufferAdd,MaxSemName+1);
+
+    int ret = sTab->Signal(filename);
+    machine->WriteRegister(2,ret);
+}
+
+void _Down () {
+        int bufferAdd = machine->ReadRegister(4);
+    int semval = machine->ReadRegister(5);
+    if(bufferAdd == 0 || semval <0 ) {
+        machine->WriteRegister(2,-1);
+        return;
+    }
+
+    char * filename = new char[MaxSemName];
+    filename = UserToSystem(bufferAdd,MaxSemName+1);
+
+    int ret = sTab->Wait(filename);
+    machine->WriteRegister(2,ret);
+}
+
 void ExceptionHandler(ExceptionType which)
 {
     int type = machine->ReadRegister(2);
@@ -483,11 +554,41 @@ void ExceptionHandler(ExceptionType which)
             _Seek();
             break;
         }
+        case SC_Exec:
+        {
+            _Exec();
+            break;
         }
-        //Avanced Program Counter
-        machine->registers[PrevPCReg] = machine->registers[PCReg];
-        machine->registers[PCReg] = machine->registers[NextPCReg];
-        machine->registers[NextPCReg] = machine->registers[NextPCReg] + 4;
+        case SC_Exit:
+        {
+            _Exit();
+            break;
+        }
+        case SC_Join:
+        {
+            _Join();
+            break;
+        }
+        case SC_CreateSemaphore:
+        {
+            _CreateSemaphore();
+            break;
+        }
+        case SC_Up:
+        {
+            _Up();
+            break;
+        }
+        case SC_Down:
+        {
+            _Down();
+            break;
+        }
+        }
+            //Avanced Program Counter
+            machine->registers[PrevPCReg] = machine->registers[PCReg];
+            machine->registers[PCReg] = machine->registers[NextPCReg];
+            machine->registers[NextPCReg] = machine->registers[NextPCReg] + 4;
         break;
     }
     case PageFaultException:
