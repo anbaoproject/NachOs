@@ -4,6 +4,8 @@
 #include "thread.h"
 #include "synch.h"
 #include "bitmap.h"
+#include "PCB.h"
+
 
 #define MAX_PROCESS 10
 
