@@ -3,6 +3,7 @@
 
 #include "thread.h"
 #include "synch.h"
+#include "bitmap.h"
 
 #define MAX_PROCESS 10
 
