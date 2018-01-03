@@ -59,6 +59,40 @@ SwapHeader(NoffHeader *noffH)
 //
 //	"executable" is the file containing the object code to load into memory
 //----------------------------------------------------------------------
+FileTable :: FileTable()
+{
+	for ( int i = 0; i < NumFileTable; i++ )
+	{
+		//type[i] = NULL;
+	//	currentOffset[i] = NULL;
+		FileName[i] = NULL;
+	}
+	FileTableOpen[0] = new OpenFile(0); //Standard Input (stdin)
+	FileTableOpen[1] = new OpenFile(1); // Standard Output (stdout)
+	FileTableOpen[2] = new OpenFile(2); //read only
+	FileTableOpen[3] = new OpenFile(3); // write and read
+	FileTableOpen[4] = new OpenFile(4); //Standard Error (stderr)
+	
+	for ( int i = 5; i < NumFileTable; i++ )
+	{
+		FileTableOpen[i] = NULL;
+	}
+	FileName[0] = "stdin"; //type[0] = 0;
+	FileName[1] = "stdout";//type[1] = 1;
+	FileName[2] = "olread"; //type[0] = 2;
+	FileName[3] = "reandwr";//type[1] = 3;
+	FileName[4] = "stderr";//type[1] = 3;
+	
+	
+}
+FileTable :: ~FileTable()
+{
+		delete FileTableOpen;
+		//delete type;
+		for ( int i = 0; i < NumFileTable; i++ )
+			delete FileName[i];
+		delete FileName;
+}
 
 AddrSpace::AddrSpace(OpenFile *executable)
 {
@@ -243,7 +277,7 @@ AddrSpace::~AddrSpace()
 {
     for (unsigned int x = 0; x < numPages; x++)
     {
-        gPhysPageBitMap->Clear(pageTable[i].physicalPage);
+        gPhysPageBitMap->Clear(pageTable[x].physicalPage);
     }
     delete pageTable;
 }

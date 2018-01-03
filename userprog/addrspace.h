@@ -37,6 +37,8 @@ public:
 
 class AddrSpace {
   public:
+  friend class FileTable;
+  FileTable* openfiletab;
   	AddrSpace(char* filename);
     AddrSpace(OpenFile *executable);	// Create an address space,
 					// initializing it with the program
