@@ -158,7 +158,7 @@ Initialize(int argc, char **argv)
     gPhysPageBitMap = new BitMap(NumPhysPages);
     addrLock = new Semaphore("addrLock",1);
     sTab = new sTable();
-    pTab = new pTable();
+    pTab = new pTable(10);
 
 #endif
 
